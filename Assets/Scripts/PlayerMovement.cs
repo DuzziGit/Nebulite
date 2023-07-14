@@ -47,15 +47,16 @@ public class PlayerMovement : MonoBehaviour
         {
             Debug.Log("Hit Material: " + hit.collider.gameObject.name);
             currentMaterial = hit.collider.gameObject;
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                Destroy(currentMaterial);
+                currentMaterial = null;
+            }
         }
         else
         {
             currentMaterial = null;
-        }
-
-        if (Input.GetKeyDown(KeyCode.E) && currentMaterial != null)
-        {
-            Destroy(currentMaterial);
         }
 
         UpdateLineRenderer();
