@@ -5,10 +5,10 @@ public class materialSpawner : MonoBehaviour
 {
     public int maxPlatforms = 10;
     public GameObject[] platformPrefabs;
-    public float xPadding = 15;
-    public float yPadding = 20;
-    public Vector2 minSpawnPosition = new Vector2(-100, 0);
-    public Vector2 maxSpawnPosition = new Vector2(100, 120);
+    public float xPadding = 1;
+    public float yPadding = 1;
+    public Vector2 minSpawnPosition = new Vector2(0, 0);
+    public Vector2 maxSpawnPosition = new Vector2(35, 40);
     public float circleRadius = 50f;
     public LayerMask platformLayer;
 

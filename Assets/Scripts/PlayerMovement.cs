@@ -4,101 +4,59 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-
     public float moveSpeed;
     public Rigidbody2D rb2d;
     private Vector2 moveInput;
 
-    //public BoxCollider2D range;
+    public LayerMask materialLayer;
+    public float raycastDistance = 1f;
+    public float raycastLineWidth = 0.1f;
 
-    public GameObject activeRangeUp;
-    public GameObject activeRangeDown;
-    public GameObject activeRangeLeft;
-    public GameObject activeRangeRight;
+    private LineRenderer lineRenderer;
+    private GameObject currentMaterial;
 
-
-
-    // Start is called before the first frame update
     void Start()
     {
-        
+        lineRenderer = gameObject.AddComponent<LineRenderer>();
+        lineRenderer.startWidth = raycastLineWidth;
+        lineRenderer.endWidth = raycastLineWidth;
+        lineRenderer.material.color = Color.red;
     }
 
-    // Update is called once per frame
     void Update()
     {
-
-
-        //Get Player move direction
         moveInput.x = Input.GetAxisRaw("Horizontal");
         moveInput.y = Input.GetAxisRaw("Vertical");
 
         moveInput.Normalize();
 
         rb2d.velocity = moveInput * moveSpeed;
-        //Multiply move direction by moveSpeed value
 
-
-
-        if (moveInput.y > 0)
+        if (moveInput.magnitude > 0)
         {
-            //Moving up
-            Debug.Log("moving up...");
-            
-            activeRangeUp.SetActive(true);
-            activeRangeDown.SetActive(false);
-            activeRangeLeft.SetActive(false);
-            activeRangeRight.SetActive(false);
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, moveInput, raycastDistance, materialLayer);
+            if (hit.collider != null && hit.collider.gameObject.layer == LayerMask.NameToLayer("Material"))
+            {
+                Debug.Log("Hit Material");
+                currentMaterial = hit.collider.gameObject;
+            }
+            else
+            {
+                currentMaterial = null;
+            }
 
+            lineRenderer.enabled = true;
+            lineRenderer.SetPosition(0, transform.position);
+            lineRenderer.SetPosition(1, transform.position + (Vector3)moveInput.normalized * raycastDistance);
+
+            if (Input.GetKeyDown(KeyCode.E) && currentMaterial != null)
+            {
+                Destroy(currentMaterial);
+            }
         }
-        if (moveInput.y < 0)
+        else
         {
-            //Moving down
-            Debug.Log("moving down...");
-
-            activeRangeUp.SetActive(false);
-            activeRangeDown.SetActive(true);
-            activeRangeLeft.SetActive(false);
-            activeRangeRight.SetActive(false);
-
+            lineRenderer.enabled = false;
         }
-
-        if (moveInput.x > 0)
-		{
-            //Moving right
-            Debug.Log("moving right...");
-
-            activeRangeUp.SetActive(false);
-            activeRangeDown.SetActive(false);
-            activeRangeLeft.SetActive(false);
-            activeRangeRight.SetActive(true);
-
-        }
-        if (moveInput.x < 0)
-        {
-            //Moving left
-            Debug.Log("moving left...");
-
-            activeRangeUp.SetActive(false);
-            activeRangeDown.SetActive(false);
-            activeRangeLeft.SetActive(true);
-            activeRangeRight.SetActive(false);
-
-        }
-
-
-
-
-    }
-
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        Debug.Log("Enter");
-        if (collision.CompareTag("Material"))
-        {
-
-        }
-
     }
 }
