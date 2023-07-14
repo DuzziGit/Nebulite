@@ -13,33 +13,41 @@ public class PlayerMovement : MonoBehaviour
     const string walkDown = "WalkDown";
     const string walkRight = "WalkSideRight";
     const string walkLeft = "WalkSideLeft";
+    public GameObject laserStartPoint;
+
+    public float laserLength = 5f;
 
     public float moveSpeed;
     public Rigidbody2D rb2d;
     private Vector2 moveInput;
-    private int direction;
     public LayerMask materialLayer;
     public float raycastDistance = 5f;
     public float raycastLineWidth = 0.1f;
     public int damageAmount = 1;
-
+    public float attackInterval = 0.5f;
+    public float attackRange = 5f;
+    public Color rayColor = Color.red;
     public Animator animator;
 
-    private LineRenderer lineRenderer;
-    private MaterialController currentMaterialController;
-
+    private bool isAttacking = false;
+    private float attackTimer = 0f;
+    public LineRenderer lineRenderer;
     private Vector2 lastMoveDirection;
     private Vector3 lastPosition;
-
-    private int coins = 0; // player's coin count
-    private Dictionary<string, int> materials = new Dictionary<string, int>(); // player's collected materials
+    private int coins = 0;
+    private int direction = 0;
+    private Dictionary<string, int> materials = new Dictionary<string, int>();
 
     void Start()
     {
-        //lineRenderer = gameObject.AddComponent<LineRenderer>();
-        //lineRenderer.startWidth = raycastLineWidth;
-        //lineRenderer.endWidth = raycastLineWidth;
-        //lineRenderer.material.color = Color.red;
+        // Find or create a LineRenderer component
+       
+
+        lineRenderer.startWidth = raycastLineWidth;
+        lineRenderer.endWidth = raycastLineWidth;
+        lineRenderer.material = new Material(Shader.Find("Unlit/Color"));
+        lineRenderer.material.color = rayColor;
+        lineRenderer.enabled = false;
     }
 
     void Update()
@@ -47,114 +55,113 @@ public class PlayerMovement : MonoBehaviour
         moveInput.x = Input.GetAxisRaw("Horizontal");
         moveInput.y = Input.GetAxisRaw("Vertical");
         moveInput.Normalize();
-        handleAnimation();
+
         rb2d.velocity = moveInput * moveSpeed;
 
         // Update animator parameters
-        animator.SetFloat("MoveX", moveInput.x);
-        animator.SetFloat("MoveY", moveInput.y);
-        animator.SetBool("IsWalking", moveInput.magnitude > 0);
+      
+        lastMoveDirection = moveInput;
 
-        if (moveInput.magnitude > 0)
+        if (moveInput != Vector2.zero)
         {
-            animator.SetBool("isWalking", true);
-            lastMoveDirection = moveInput;
             lastPosition = transform.position;
-            Debug.Log(moveInput.x);
-            Debug.Log(moveInput.y);
+        }
+        HandleAnimation();
 
-            // Calculate the angle of the movement direction
-            float angle = Mathf.Atan2(moveInput.y, moveInput.x) * Mathf.Rad2Deg;
+        // Calculate the angle based on moveInput
+        float angle = Mathf.Atan2(moveInput.y, moveInput.x) * Mathf.Rad2Deg;
 
-            // Set the corresponding animator parameter based on the angle
-            if (angle >= -22.5f && angle < 22.5f)
-            {
-                // Right
-                direction = 0;
-            }
-            else if (angle >= 22.5f && angle < 67.5f)
-            {
-                // Up Right
-                direction = 1;
-            }
-            else if (angle >= 67.5f && angle < 112.5f)
-            {
-                // Up
-                direction = 2;
-            }
-            else if (angle >= 112.5f && angle < 157.5f)
-            {
-                // Up Left
-                direction = 3;
-            }
-            else if (angle >= 157.5f || angle < -157.5f)
-            {
-                // Left
-                direction = 4;
-            }
-            else if (angle >= -157.5f && angle < -112.5f)
-            {
-                // Down Left
-                direction = 5;
-            }
-            else if (angle >= -112.5f && angle < -67.5f)
-            {
-                // Down
-                direction = 6;
-            }
-            else if (angle >= -67.5f && angle < -22.5f)
-            {
-                // Down Right
-                direction = 7;
-            }
+        // Set the corresponding animator parameter based on the angle
+        if (angle >= -22.5f && angle < 22.5f)
+        {
+            // Right
+            direction = 0;
+        }
+        else if (angle >= 22.5f && angle < 67.5f)
+        {
+            // Up Right
+            direction = 1;
+        }
+        else if (angle >= 67.5f && angle < 112.5f)
+        {
+            // Up
+            direction = 2;
+        }
+        else if (angle >= 112.5f && angle < 157.5f)
+        {
+            // Up Left
+            direction = 3;
+        }
+        else if (angle >= 157.5f || angle < -157.5f)
+        {
+            // Left
+            direction = 4;
+        }
+        else if (angle >= -157.5f && angle < -112.5f)
+        {
+            // Down Left
+            direction = 5;
+        }
+        else if (angle >= -112.5f && angle < -67.5f)
+        {
+            // Down
+            direction = 6;
+        }
+        else if (angle >= -67.5f && angle < -22.5f)
+        {
+            // Down Right
+            direction = 7;
         }
         else
         {
-            animator.SetBool("isWalking", false);
+            animator.SetBool("IsWalking", false);
         }
 
-        RaycastHit2D hit = Physics2D.Raycast(lastPosition, lastMoveDirection, raycastDistance, materialLayer);
-        Debug.DrawRay(lastPosition, lastMoveDirection * raycastDistance, Color.green);
+        // Aim towards the mouse position
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 directionToMouse = (mousePosition - transform.position).normalized;
+        Vector2 aimDirection = directionToMouse;
 
-        if (hit.collider != null && hit.collider.gameObject.CompareTag("Material"))
+        // Attack control
+        if (Input.GetMouseButton(0))
         {
-            // Debug.Log("Hit Material: " + hit.collider.gameObject.name);
-            currentMaterialController = hit.collider.gameObject.GetComponent<MaterialController>();
+            isAttacking = true;
+            lineRenderer.enabled = true;
 
-            if (currentMaterialController != null && Input.GetMouseButtonDown(0))
-            {
-                currentMaterialController.TakeDamage(damageAmount);
-            }
+            Vector3 laserStart = laserStartPoint != null ? laserStartPoint.transform.position : transform.position;
+            Vector3 laserEnd = laserStart + (new Vector3(aimDirection.x, aimDirection.y, 0) * laserLength);
+
+            lineRenderer.SetPosition(0, laserStart);
+            lineRenderer.SetPosition(1, laserEnd);
         }
         else
         {
-            currentMaterialController = null;
+            isAttacking = false;
+            lineRenderer.enabled = false;
         }
 
-        UpdateLineRenderer();
 
-        Debug.Log("Coins: " + coins);
-        foreach (KeyValuePair<string, int> material in materials)
+        // Attacking and damaging the material
+        if (isAttacking)
         {
-            Debug.Log("Material: " + material.Key + ", Amount: " + material.Value);
+            attackTimer += Time.deltaTime;
+
+            if (attackTimer >= attackInterval)
+            {
+                attackTimer = 0f;
+                RaycastHit2D hit = Physics2D.Raycast(transform.position, aimDirection, raycastDistance, materialLayer);
+                if (hit.collider != null)
+                {
+                    MaterialController materialController = hit.collider.GetComponent<MaterialController>();
+                    if (materialController != null)
+                    {
+                        materialController.TakeDamage(damageAmount);
+                    }
+                }
+            }
         }
     }
-
-    public void AddCoins(int amount)
-    {
-        coins += amount;
-    }
-
-    public void AddMaterial(string type, int amount)
-    {
-        if (!materials.ContainsKey(type))
-        {
-            materials[type] = 0;
-        }
-        materials[type] += amount;
-    }
-
-    void handleAnimation()
+    void HandleAnimation()
     {
         if (direction == 0)
         {
@@ -194,13 +201,17 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    void UpdateLineRenderer()
+    public void AddCoins(int amount)
     {
-        if (lineRenderer != null)
+        coins += amount;
+    }
+
+    public void AddMaterial(string type, int amount)
+    {
+        if (!materials.ContainsKey(type))
         {
-            lineRenderer.enabled = true;
-            lineRenderer.SetPosition(0, lastPosition);
-            lineRenderer.SetPosition(1, lastPosition + (Vector3)lastMoveDirection.normalized * raycastDistance);
+            materials[type] = 0;
         }
+        materials[type] += amount;
     }
 }

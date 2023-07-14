@@ -3,13 +3,14 @@ using UnityEngine;
 public class CharacterController : MonoBehaviour
 {
     public Transform shipTransform; // Reference to the ship's transform
-    private LineRenderer lineRenderer; // Reference to the LineRenderer component
+    public LineRenderer lineRenderer; // Reference to the LineRenderer component
 
     private void Start()
     {
-        lineRenderer = GetComponent<LineRenderer>();
+        //lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.startWidth = 0.05f;
         lineRenderer.endWidth = 0.05f;
+        
     }
 
     private void Update()
