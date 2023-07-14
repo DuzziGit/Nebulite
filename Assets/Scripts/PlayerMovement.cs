@@ -27,7 +27,7 @@ public class PlayerMovement : MonoBehaviour
 
     public int damageAmount = 1;
     public float attackInterval = 0.5f;
-    public Color rayColor = Color.red;
+   // public Color rayColor = Color.red;
     public Animator animator;
 
     private bool isAttacking = false;
@@ -47,7 +47,7 @@ public class PlayerMovement : MonoBehaviour
         //lineRenderer.startWidth = raycastLineWidthstart;
         //lineRenderer.endWidth = raycastLineWidthend;
         lineRenderer.material = new Material(Shader.Find("Unlit/Color"));
-        lineRenderer.material.color = rayColor;
+       // lineRenderer.material.color = rayColor;
         lineRenderer.enabled = false;
     }
 
