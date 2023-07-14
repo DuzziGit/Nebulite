@@ -17,18 +17,16 @@ public class materialSpawner : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(transform.position, new Vector3(maxSpawnPosition.x - minSpawnPosition.x, maxSpawnPosition.y - minSpawnPosition.y, 0));
+        Vector3 spawnAreaSize = new Vector3(maxSpawnPosition.x - minSpawnPosition.x, maxSpawnPosition.y - minSpawnPosition.y, 0);
+        Vector3 spawnAreaCenter = new Vector3(minSpawnPosition.x + spawnAreaSize.x / 2, minSpawnPosition.y + spawnAreaSize.y / 2, 0);
+        Gizmos.DrawWireCube(spawnAreaCenter, spawnAreaSize);
 
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, circleRadius);
+        Gizmos.DrawWireSphere(new Vector3(transform.position.x, transform.position.y, 0), circleRadius);
     }
 
     private void Start()
     {
-
-        float angleStep = 360f / maxPlatforms;
-        float currentAngle = 0;
-
         for (int i = 0; i < maxPlatforms; i++)
         {
             GameObject prefab = platformPrefabs[Random.Range(0, platformPrefabs.Length)];
@@ -36,18 +34,24 @@ public class materialSpawner : MonoBehaviour
             Vector2 size = prefab.GetComponent<BoxCollider2D>().bounds.size;
             size += new Vector2(xPadding * 2, yPadding * 2);
 
-            Vector2 position = new Vector2(Mathf.Cos(currentAngle * Mathf.Deg2Rad), Mathf.Sin(currentAngle * Mathf.Deg2Rad)) * circleRadius;
+            Vector2 position;
+            Collider2D hitCollider;
 
-            position.x = Mathf.Clamp(position.x, minSpawnPosition.x + size.x / 2, maxSpawnPosition.x - size.x / 2);
-            position.y = Mathf.Clamp(position.y, minSpawnPosition.y + size.y / 2, maxSpawnPosition.y - size.y / 2);
-
-            if (Physics2D.OverlapBox(position, size, 0, platformLayer) == null)
+            // Try to find a suitable position to spawn the prefab.
+            // Repeat this process until a valid position is found.
+            do
             {
-                GameObject platform = Instantiate(prefab, position, Quaternion.identity);
-                platforms.Add(platform);
-            }
+                position = new Vector2(
+                    Random.Range(minSpawnPosition.x + size.x / 2, maxSpawnPosition.x - size.x / 2),
+                    Random.Range(minSpawnPosition.y + size.y / 2, maxSpawnPosition.y - size.y / 2)
+                );
+                hitCollider = Physics2D.OverlapBox(position, size, 0, platformLayer);
+            } while (hitCollider != null);
 
-            currentAngle += angleStep;
+            GameObject platform = Instantiate(prefab, position, Quaternion.identity);
+            platforms.Add(platform);
         }
     }
 }
+
+

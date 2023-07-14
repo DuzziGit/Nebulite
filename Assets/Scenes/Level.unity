@@ -13413,7 +13413,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1928043548}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.22, y: -0.15, z: -1.0973648}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -13435,11 +13435,11 @@ MonoBehaviour:
   maxPlatforms: 10
   platformPrefabs:
   - {fileID: 1004634355}
-  xPadding: 1
-  yPadding: 1
-  minSpawnPosition: {x: 0, y: 5.1}
-  maxSpawnPosition: {x: 34.7, y: 40}
-  circleRadius: 15
+  xPadding: 5
+  yPadding: 5
+  minSpawnPosition: {x: -19.6, y: -19.4}
+  maxSpawnPosition: {x: 17.5, y: 19.34}
+  circleRadius: 10
   platformLayer:
     serializedVersion: 2
     m_Bits: 128
