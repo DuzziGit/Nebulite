@@ -10,6 +10,7 @@ public class materialSpawner : MonoBehaviour
     public Vector2 minSpawnPosition = new Vector2(0, 0);
     public Vector2 maxSpawnPosition = new Vector2(35, 40);
     public float circleRadius = 50f;
+    public float innerCircleRadius = 2f;
     public LayerMask platformLayer;
 
     private List<GameObject> platforms = new List<GameObject>();
@@ -17,14 +18,12 @@ public class materialSpawner : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Vector3 spawnAreaSize = new Vector3(maxSpawnPosition.x - minSpawnPosition.x, maxSpawnPosition.y - minSpawnPosition.y, 0);
-        Vector3 spawnAreaCenter = new Vector3(minSpawnPosition.x + spawnAreaSize.x / 2, minSpawnPosition.y + spawnAreaSize.y / 2, 0);
-        Gizmos.DrawWireCube(spawnAreaCenter, spawnAreaSize);
+        Gizmos.DrawWireSphere(new Vector3(transform.position.x, transform.position.y, 0), circleRadius);
 
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(new Vector3(transform.position.x, transform.position.y, 0), circleRadius);
+        float noSpawnRadius = innerCircleRadius; 
+        Gizmos.DrawWireSphere(new Vector3(transform.position.x, transform.position.y, 0), noSpawnRadius);
     }
-
     private void Start()
     {
         for (int i = 0; i < maxPlatforms; i++)
@@ -36,22 +35,35 @@ public class materialSpawner : MonoBehaviour
 
             Vector2 position;
             Collider2D hitCollider;
+            float noSpawnRadius = innerCircleRadius;
+            int attempts = 100;  // limit the number of attempts to find a suitable position
 
             // Try to find a suitable position to spawn the prefab.
             // Repeat this process until a valid position is found.
             do
             {
-                position = new Vector2(
-                    Random.Range(minSpawnPosition.x + size.x / 2, maxSpawnPosition.x - size.x / 2),
-                    Random.Range(minSpawnPosition.y + size.y / 2, maxSpawnPosition.y - size.y / 2)
-                );
-                hitCollider = Physics2D.OverlapBox(position, size, 0, platformLayer);
-            } while (hitCollider != null);
+                // generate a random angle and a random radius between the noSpawnRadius and circleRadius
+                float angle = Random.Range(0, 360);
+                float radius = Random.Range(noSpawnRadius, circleRadius);
 
-            GameObject platform = Instantiate(prefab, position, Quaternion.identity);
-            platforms.Add(platform);
+                // calculate the position based on the angle and radius
+                position = new Vector2(
+                    transform.position.x + radius * Mathf.Cos(angle * Mathf.Deg2Rad),
+                    transform.position.y + radius * Mathf.Sin(angle * Mathf.Deg2Rad)
+                );
+
+                hitCollider = Physics2D.OverlapBox(position, size, 0, platformLayer);
+            } while (hitCollider != null && --attempts > 0); // decrement attempts each time the loop runs
+
+            if (attempts > 0)  // if a suitable position was found
+            {
+                GameObject platform = Instantiate(prefab, position, Quaternion.identity);
+                platforms.Add(platform);
+            }
         }
     }
+
+
 }
 
 
