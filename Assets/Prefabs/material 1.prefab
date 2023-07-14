@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1302859029234881099}
   - component: {fileID: 1302859029234881098}
   - component: {fileID: 1004634358}
+  - component: {fileID: -5104398431797284502}
   m_Layer: 7
   m_Name: material 1
   m_TagString: Material
@@ -111,3 +112,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2, y: 1.5026188}
   m_EdgeRadius: 0
+--- !u!114 &-5104398431797284502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1302859029234881101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3096719e3e4453940a300d9da6a67647, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 10
+  materialKind: Asteroid
+  materialDropMin: 1
+  materialDropMax: 5

@@ -3,7 +3,9 @@ guid: 639624f67c955cf4994334abcb8eae4e
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - materialSprite: {instanceID: 0}
+  - materialPrefab: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

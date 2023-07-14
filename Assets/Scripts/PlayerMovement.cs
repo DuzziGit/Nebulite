@@ -11,9 +11,10 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask materialLayer;
     public float raycastDistance = 5f;
     public float raycastLineWidth = 0.1f;
+    public int damageAmount = 1;
 
     private LineRenderer lineRenderer;
-    private GameObject currentMaterial;
+    private MaterialController currentMaterialController;
 
     private Vector2 lastMoveDirection;
     private Vector3 lastPosition;
@@ -45,18 +46,17 @@ public class PlayerMovement : MonoBehaviour
 
         if (hit.collider != null && hit.collider.gameObject.CompareTag("Material"))
         {
-            Debug.Log("Hit Material: " + hit.collider.gameObject.name);
-            currentMaterial = hit.collider.gameObject;
+           // Debug.Log("Hit Material: " + hit.collider.gameObject.name);
+            currentMaterialController = hit.collider.gameObject.GetComponent<MaterialController>();
 
             if (Input.GetMouseButtonDown(0))
             {
-                Destroy(currentMaterial);
-                currentMaterial = null;
+                currentMaterialController.TakeDamage(damageAmount);
             }
         }
         else
         {
-            currentMaterial = null;
+            currentMaterialController = null;
         }
 
         UpdateLineRenderer();

@@ -6,4 +6,5 @@ public class MaterialData : ScriptableObject
     public Sprite materialSprite;
     public int materialProperty;
     public GameObject materialPrefab;
+    public Color spriteTint = Color.white;
 }

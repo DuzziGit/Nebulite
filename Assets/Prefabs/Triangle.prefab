@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2249135519004563357}
   - component: {fileID: 2249135519004563356}
   - component: {fileID: 2249135519004563354}
-  - component: {fileID: 2249135519004563355}
   - component: {fileID: 2249135519004563352}
   m_Layer: 0
   m_Name: Triangle
@@ -112,25 +111,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &2249135519004563355
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2249135519004563359}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: edb6145878aeb1a4b9321717768c872c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 5
-  rb2d: {fileID: 2249135519004563354}
-  materialLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  raycastDistance: 1
-  raycastLineWidth: 0.1
 --- !u!60 &2249135519004563352
 PolygonCollider2D:
   m_ObjectHideFlags: 0
