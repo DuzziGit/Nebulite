@@ -128,3 +128,4 @@ MonoBehaviour:
   materialKind: Asteroid
   materialDropMin: 1
   materialDropMax: 5
+  materialDropPrefab: {fileID: 1302859029234881101, guid: 9099adb13910bfb4ba4350c8ce8e5951, type: 3}

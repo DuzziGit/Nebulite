@@ -19,6 +19,9 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 lastMoveDirection;
     private Vector3 lastPosition;
 
+    private int coins = 0; // player's coin count
+    private Dictionary<string, int> materials = new Dictionary<string, int>(); // player's collected materials
+
     void Start()
     {
         lineRenderer = gameObject.AddComponent<LineRenderer>();
@@ -46,10 +49,10 @@ public class PlayerMovement : MonoBehaviour
 
         if (hit.collider != null && hit.collider.gameObject.CompareTag("Material"))
         {
-           // Debug.Log("Hit Material: " + hit.collider.gameObject.name);
+            // Debug.Log("Hit Material: " + hit.collider.gameObject.name);
             currentMaterialController = hit.collider.gameObject.GetComponent<MaterialController>();
 
-            if (Input.GetMouseButtonDown(0))
+            if (currentMaterialController != null && Input.GetMouseButtonDown(0))
             {
                 currentMaterialController.TakeDamage(damageAmount);
             }
@@ -60,9 +63,30 @@ public class PlayerMovement : MonoBehaviour
         }
 
         UpdateLineRenderer();
+
+        Debug.Log("Coins: " + coins);
+        foreach (KeyValuePair<string, int> material in materials)
+        {
+            Debug.Log("Material: " + material.Key + ", Amount: " + material.Value);
+        }
+    }
+    public void AddCoins(int amount)
+    {
+        coins += amount;
     }
 
-    void UpdateLineRenderer()
+    public void AddMaterial(string type, int amount)
+    {
+        if (!materials.ContainsKey(type))
+        {
+            materials[type] = 0;
+        }
+        materials[type] += amount;
+    }
+
+
+
+void UpdateLineRenderer()
     {
         if (lineRenderer != null)
         {
