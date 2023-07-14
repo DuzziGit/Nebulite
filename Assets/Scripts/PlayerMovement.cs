@@ -13,6 +13,8 @@ public class PlayerMovement : MonoBehaviour
     public float raycastLineWidth = 0.1f;
     public int damageAmount = 1;
 
+    public Animator animator;
+
     private LineRenderer lineRenderer;
     private MaterialController currentMaterialController;
 
@@ -38,11 +40,24 @@ public class PlayerMovement : MonoBehaviour
 
         rb2d.velocity = moveInput * moveSpeed;
 
+        // Update animator parameters
+        animator.SetFloat("MoveX", moveInput.x);
+        animator.SetFloat("MoveY", moveInput.y);
+        animator.SetBool("IsWalking", moveInput.magnitude > 0);
         if (moveInput.magnitude > 0)
         {
+            animator.SetBool("isWalking", true);
             lastMoveDirection = moveInput;
             lastPosition = transform.position;
+            Debug.Log(moveInput.x);
+            Debug.Log(moveInput.y);
+
+        } else if (moveInput.magnitude <= 0)
+        {
+            animator.SetBool("isWalking", false);
+
         }
+
 
         RaycastHit2D hit = Physics2D.Raycast(lastPosition, lastMoveDirection, raycastDistance, materialLayer);
         Debug.DrawRay(lastPosition, lastMoveDirection * raycastDistance, Color.green);
