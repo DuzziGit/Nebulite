@@ -13833,6 +13833,10 @@ PrefabInstance:
       propertyPath: m_SpriteTilingProperty.oldSize.x
       value: 1.0625
       objectReference: {fileID: 0}
+    - target: {fileID: 2249135519004563355, guid: e445706dbd9b67342870918f301c43ea, type: 3}
+      propertyPath: materialLayer.m_Bits
+      value: 128
+      objectReference: {fileID: 0}
     - target: {fileID: 2249135519004563356, guid: e445706dbd9b67342870918f301c43ea, type: 3}
       propertyPath: m_Sprite
       value: 
