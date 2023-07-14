@@ -24,10 +24,10 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-        lineRenderer = gameObject.AddComponent<LineRenderer>();
-        lineRenderer.startWidth = raycastLineWidth;
-        lineRenderer.endWidth = raycastLineWidth;
-        lineRenderer.material.color = Color.red;
+        //lineRenderer = gameObject.AddComponent<LineRenderer>();
+        //lineRenderer.startWidth = raycastLineWidth;
+        //lineRenderer.endWidth = raycastLineWidth;
+        //lineRenderer.material.color = Color.red;
     }
 
     void Update()

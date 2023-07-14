@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1302859029234881099}
   - component: {fileID: 1302859029234881098}
   - component: {fileID: 1004634358}
+  - component: {fileID: -5104398431797284502}
   m_Layer: 7
   m_Name: material 3
   m_TagString: Material
@@ -75,7 +76,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 8e1131ff87914254cabecabca0cf94a3, type: 3}
-  m_Color: {r: 0.33962262, g: 0.08170166, b: 0.12399148, a: 1}
+  m_Color: {r: 0.05882354, g: 0.11315666, b: 0.65882355, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -111,3 +112,21 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2, y: 1.5026188}
   m_EdgeRadius: 0
+--- !u!114 &-5104398431797284502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1302859029234881101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3096719e3e4453940a300d9da6a67647, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 35
+  materialKind: Asteroid
+  materialDropMin: 5
+  materialDropMax: 10
+  spreadRadius: 1.5
+  materialDropPrefab: {fileID: 1302859029234881101, guid: b12058003a468794d8782bfd8303793f, type: 3}
