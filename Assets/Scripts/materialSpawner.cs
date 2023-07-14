@@ -1,30 +1,53 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class materialSpawner : MonoBehaviour
 {
-    public GameObject materialPrefab;
-    public int numberOfMaterials;
-    public Vector2 minSpawnBoundary;
-    public Vector2 maxSpawnBoundary;
-    public float spawnRadius;
+    public int maxPlatforms = 10;
+    public GameObject[] platformPrefabs;
+    public float xPadding = 15;
+    public float yPadding = 20;
+    public Vector2 minSpawnPosition = new Vector2(-100, 0);
+    public Vector2 maxSpawnPosition = new Vector2(100, 120);
+    public float circleRadius = 50f;
+    public LayerMask platformLayer;
 
-    void Start()
+    private List<GameObject> platforms = new List<GameObject>();
+
+    private void OnDrawGizmosSelected()
     {
-        SpawnMaterials();
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireCube(transform.position, new Vector3(maxSpawnPosition.x - minSpawnPosition.x, maxSpawnPosition.y - minSpawnPosition.y, 0));
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, circleRadius);
     }
 
-    void SpawnMaterials()
+    private void Start()
     {
-        for (int i = 0; i < numberOfMaterials; i++)
+
+        float angleStep = 360f / maxPlatforms;
+        float currentAngle = 0;
+
+        for (int i = 0; i < maxPlatforms; i++)
         {
-            float x = Random.Range(minSpawnBoundary.x, maxSpawnBoundary.x);
-            float y = Random.Range(minSpawnBoundary.y, maxSpawnBoundary.y);
+            GameObject prefab = platformPrefabs[Random.Range(0, platformPrefabs.Length)];
 
-            // Apply a random offset within the spawn radius
-            Vector2 randomOffset = Random.insideUnitCircle * spawnRadius;
-            Vector3 spawnPosition = new Vector3(x + randomOffset.x, y + randomOffset.y, 0);
+            Vector2 size = prefab.GetComponent<BoxCollider2D>().bounds.size;
+            size += new Vector2(xPadding * 2, yPadding * 2);
 
-            Instantiate(materialPrefab, spawnPosition, Quaternion.identity);
+            Vector2 position = new Vector2(Mathf.Cos(currentAngle * Mathf.Deg2Rad), Mathf.Sin(currentAngle * Mathf.Deg2Rad)) * circleRadius;
+
+            position.x = Mathf.Clamp(position.x, minSpawnPosition.x + size.x / 2, maxSpawnPosition.x - size.x / 2);
+            position.y = Mathf.Clamp(position.y, minSpawnPosition.y + size.y / 2, maxSpawnPosition.y - size.y / 2);
+
+            if (Physics2D.OverlapBox(position, size, 0, platformLayer) == null)
+            {
+                GameObject platform = Instantiate(prefab, position, Quaternion.identity);
+                platforms.Add(platform);
+            }
+
+            currentAngle += angleStep;
         }
     }
 }
