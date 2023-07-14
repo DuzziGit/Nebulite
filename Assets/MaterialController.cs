@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class MaterialController : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class MaterialController : MonoBehaviour
     public int materialDropMax = 5; // maximum number of materials that can be dropped
     public float spreadRadius = 1.5f; // radius within which the materials will spread out
     public GameObject materialDropPrefab; // prefab for the dropped materials
+
+    private bool isShaking = false; // flag to indicate if the material is currently shaking
 
     public void TakeDamage(int amount)
     {
@@ -28,6 +31,29 @@ public class MaterialController : MonoBehaviour
 
             Destroy(gameObject); // destroy the material
         }
+        else if (!isShaking) // start shaking only if the material is not already shaking
+        {
+            StartCoroutine(ShakeMaterial());
+        }
+    }
+
+    private IEnumerator ShakeMaterial()
+    {
+        isShaking = true;
+
+        float shakeDuration = 0.2f;
+        float shakeIntensity = 0.1f;
+        Vector3 originalPosition = transform.position;
+
+        while (shakeDuration > 0)
+        {
+            transform.position = originalPosition + Random.insideUnitSphere * shakeIntensity;
+            shakeDuration -= Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = originalPosition;
+        isShaking = false;
     }
 
     void OnDrawGizmosSelected()

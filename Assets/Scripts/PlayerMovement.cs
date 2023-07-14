@@ -22,10 +22,11 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 moveInput;
     public LayerMask materialLayer;
     public float raycastDistance = 5f;
-    public float raycastLineWidth = 0.1f;
+    public float raycastLineWidthstart = 0.2f;
+    public float raycastLineWidthend = 0.1f;
+
     public int damageAmount = 1;
     public float attackInterval = 0.5f;
-    public float attackRange = 5f;
     public Color rayColor = Color.red;
     public Animator animator;
 
@@ -43,8 +44,8 @@ public class PlayerMovement : MonoBehaviour
         // Find or create a LineRenderer component
        
 
-        lineRenderer.startWidth = raycastLineWidth;
-        lineRenderer.endWidth = raycastLineWidth;
+        //lineRenderer.startWidth = raycastLineWidthstart;
+        //lineRenderer.endWidth = raycastLineWidthend;
         lineRenderer.material = new Material(Shader.Find("Unlit/Color"));
         lineRenderer.material.color = rayColor;
         lineRenderer.enabled = false;
