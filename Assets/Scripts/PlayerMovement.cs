@@ -15,6 +15,8 @@ public class PlayerMovement : MonoBehaviour
     const string walkLeft = "WalkSideLeft";
     public GameObject laserStartPoint;
 
+    public GameObject timerController;
+
     public float laserLength = 5f;
 
     public float moveSpeed;
@@ -27,6 +29,9 @@ public class PlayerMovement : MonoBehaviour
 
     public int damageAmount = 1;
     public float attackInterval = 0.5f;
+    public float time = 10.0f; //We Should change the name of this later
+
+
    // public Color rayColor = Color.red;
     public Animator animator;
 
@@ -49,6 +54,9 @@ public class PlayerMovement : MonoBehaviour
         lineRenderer.material = new Material(Shader.Find("Unlit/Color"));
        // lineRenderer.material.color = rayColor;
         lineRenderer.enabled = false;
+
+
+        //GetComponent
     }
 
     void Update()
@@ -161,6 +169,7 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
+
     void handleAnimation()
     {
         // Only play walk animation if character is moving
@@ -286,4 +295,10 @@ public class PlayerMovement : MonoBehaviour
             Debug.Log("moveSpeed = " + moveSpeed);
         }
     }
+
+	public void TimeHasRunOut()
+	{
+        Debug.Log("Time has run out!!!");
+	}
+
 }

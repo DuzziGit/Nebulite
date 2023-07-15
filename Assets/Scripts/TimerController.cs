@@ -10,19 +10,34 @@ public class TimerController : MonoBehaviour
 
     float time_remaining;
 
-    public float max_time = 5.0f;
+    public float max_time;
+
+    public float playerTime;
+
+    public GameObject player;
+
+	public PlayerMovement playerMovement;
 
 
 
 
-    void Start()
+	void Start()
     {
-        time_remaining = max_time;
-    }
+		playerTime = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().time;
+
+		
+		//playerTime = 
+
+		max_time = playerTime;
+
+		time_remaining = max_time;
+
+        
+	}
 
     void Update()
     {
-
+        Debug.Log(playerTime);
 		
         
         if(time_remaining > 0)
@@ -34,14 +49,9 @@ public class TimerController : MonoBehaviour
 
         if (time_remaining <= 0)
         {
-           // Debug.Log("Time Remaining: " + time_remaining);
-            TimeHasRunOut();
-        }
+			// Debug.Log("Time Remaining: " + time_remaining);
+			playerMovement.TimeHasRunOut();
+		}
     }
 
-
-    static void TimeHasRunOut()
-    {
-        // Called when time is equal to, or less then 0
-    }
 }
