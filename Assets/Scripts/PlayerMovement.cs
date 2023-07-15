@@ -49,8 +49,7 @@ public class PlayerMovement : MonoBehaviour
         // Find or create a LineRenderer component
        
 
-        //lineRenderer.startWidth = raycastLineWidthstart;
-        //lineRenderer.endWidth = raycastLineWidthend;
+        lineRenderer.startWidth = raycastLineWidthstart;
         lineRenderer.material = new Material(Shader.Find("Unlit/Color"));
        // lineRenderer.material.color = rayColor;
         lineRenderer.enabled = false;
@@ -61,6 +60,8 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        lineRenderer.endWidth = raycastLineWidthend;
+
         moveInput.x = Input.GetAxisRaw("Horizontal");
         moveInput.y = Input.GetAxisRaw("Vertical");
         moveInput.Normalize();
@@ -247,6 +248,7 @@ public class PlayerMovement : MonoBehaviour
                 case "laserLength":
                     laserLength += upgradeAmount;
                     raycastDistance += upgradeAmount; // Update the raycast distance along with the visual laser length
+                    raycastLineWidthend += upgradeAmount;
                     break;
                 case "damageAmount":
                     damageAmount += (int)upgradeAmount;  // assuming that damageAmount should remain an integer
@@ -298,7 +300,7 @@ public class PlayerMovement : MonoBehaviour
 
 	public void TimeHasRunOut()
 	{
-        Debug.Log("Time has run out!!!");
+      //  Debug.Log("Time has run out!!!");
 	}
 
 }

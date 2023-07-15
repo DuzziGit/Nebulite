@@ -37,7 +37,7 @@ public class TimerController : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(playerTime);
+      //  Debug.Log(playerTime);
 		
         
         if(time_remaining > 0)
