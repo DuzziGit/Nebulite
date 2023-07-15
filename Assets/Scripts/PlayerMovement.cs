@@ -13,6 +13,10 @@ public class PlayerMovement : MonoBehaviour
     const string walkDown = "WalkDown";
     const string walkRight = "WalkSideRight";
     const string walkLeft = "WalkSideLeft";
+    const string walkUpRight = "WalkUpRight";
+    const string walkUpLeft = "WalkUpLeft";
+    const string walkDownRight = "WalkDownRight";
+    const string walkDownLeft = "WalkDownLeft";
     public GameObject laserStartPoint;
 
     public GameObject timerController;
@@ -32,7 +36,7 @@ public class PlayerMovement : MonoBehaviour
     public float time = 10.0f; //We Should change the name of this later
 
 
-   // public Color rayColor = Color.red;
+    // public Color rayColor = Color.red;
     public Animator animator;
 
     private bool isAttacking = false;
@@ -47,11 +51,11 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         // Find or create a LineRenderer component
-       
+
 
         lineRenderer.startWidth = raycastLineWidthstart;
         lineRenderer.material = new Material(Shader.Find("Unlit/Color"));
-       // lineRenderer.material.color = rayColor;
+        // lineRenderer.material.color = rayColor;
         lineRenderer.enabled = false;
 
 
@@ -75,7 +79,7 @@ public class PlayerMovement : MonoBehaviour
             lastPosition = transform.position;
 
         }
-       
+
         handleAnimation();
         // Calculate the angle based on moveInput
         float angle = Mathf.Atan2(moveInput.y, moveInput.x) * Mathf.Rad2Deg;
@@ -183,45 +187,64 @@ public class PlayerMovement : MonoBehaviour
                     lastMoveDirection = Vector2.right;
                     break;
                 case 1:
+                    animator.Play(walkUpRight);
+                    lastMoveDirection = new Vector2(1f, 1f);
+                    break;
                 case 2:
-                case 3:
                     animator.Play(walkUp);
                     lastMoveDirection = Vector2.up;
+                    break;
+                case 3:
+                    animator.Play(walkUpLeft);
+                    lastMoveDirection = new Vector2(-1f, 1f);
                     break;
                 case 4:
                     animator.Play(walkLeft);
                     lastMoveDirection = Vector2.left;
                     break;
                 case 5:
+                    animator.Play(walkDownLeft);
+                    lastMoveDirection = new Vector2(-1f, -1f);
+                    break;
                 case 6:
-                case 7:
                     animator.Play(walkDown);
                     lastMoveDirection = Vector2.down;
+                    break;
+                case 7:
+                    animator.Play(walkDownRight);
+                    lastMoveDirection = new Vector2(1f, -1f);
                     break;
             }
         }
         else
         {
             // Play idle animation based on last move direction
-            if (lastMoveDirection == Vector2.right)
+            float angle = Mathf.Atan2(lastMoveDirection.y, lastMoveDirection.x) * Mathf.Rad2Deg;
+
+            if (angle >= -22.5f && angle < 22.5f)
             {
+                // Right
                 animator.Play(idleRight);
             }
-            else if (lastMoveDirection == Vector2.up)
+            else if (angle >= 22.5f && angle < 112.5f)
             {
+                // Up Right to Up Left
                 animator.Play(idleUp);
             }
-            else if (lastMoveDirection == Vector2.left)
+            else if (angle >= 112.5f && angle < 157.5f || angle >= -180f && angle < -157.5f)
             {
+                // Left
                 animator.Play(idleLeft);
             }
-            else if (lastMoveDirection == Vector2.down)
+            else
             {
+                // Down
                 animator.Play(idleDown);
             }
         }
     }
-    public void AddCoins(int amount)
+
+        public void AddCoins(int amount)
     {
         coins += amount;
     }
@@ -248,7 +271,7 @@ public class PlayerMovement : MonoBehaviour
                 case "laserLength":
                     laserLength += upgradeAmount;
                     raycastDistance += upgradeAmount; // Update the raycast distance along with the visual laser length
-                    raycastLineWidthend += upgradeAmount;
+                    raycastLineWidthend += .2f;
                     break;
                 case "damageAmount":
                     damageAmount += (int)upgradeAmount;  // assuming that damageAmount should remain an integer
