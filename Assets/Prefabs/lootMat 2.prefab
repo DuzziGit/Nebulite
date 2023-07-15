@@ -125,6 +125,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   value: 15
-  materialType: Asteroid
+  materialType: Mushroom
   attractionRadius: 5
   attractionSpeed: 4

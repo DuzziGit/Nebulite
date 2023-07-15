@@ -30,6 +30,7 @@ public class PlayerMovement : MonoBehaviour
     public float raycastDistance = 5f;
     public float raycastLineWidthstart = 0.2f;
     public float raycastLineWidthend = 0.1f;
+    public Color rayColor = Color.red;
 
     public int damageAmount = 1;
     public float attackInterval = 0.5f;
@@ -55,7 +56,7 @@ public class PlayerMovement : MonoBehaviour
 
         lineRenderer.startWidth = raycastLineWidthstart;
         lineRenderer.material = new Material(Shader.Find("Unlit/Color"));
-        // lineRenderer.material.color = rayColor;
+         lineRenderer.material.color = rayColor;
         lineRenderer.enabled = false;
 
 
@@ -256,6 +257,8 @@ public class PlayerMovement : MonoBehaviour
             materials[type] = 0;
         }
         materials[type] += amount;
+
+        Debug.Log($"Added {amount} of {type}. Current total: {materials[type]} and Coins {coins}");
     }
     public bool TryUpgrade(string property, int cost, float upgradeAmount)
     {
@@ -325,5 +328,5 @@ public class PlayerMovement : MonoBehaviour
 	{
       //  Debug.Log("Time has run out!!!");
 	}
-
+   
 }
