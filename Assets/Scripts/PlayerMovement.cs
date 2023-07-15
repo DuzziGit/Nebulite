@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    const string idleUp = "idleAnimUp";
-    const string idleDown = "idleAnimDown";
-    const string idleRight = "idleAnimRight";
-    const string idleLeft = "idleAnimLeft";
+    const string idleUp = "IdleAnimUp";
+    const string idleDown = "IdleAnimDown";
+    const string idleRight = "IdleAnimRight";
+    const string idleLeft = "IdleAnimLeft";
 
     const string walkUp = "WalkUp";
     const string walkDown = "WalkDown";
@@ -60,15 +60,14 @@ public class PlayerMovement : MonoBehaviour
         rb2d.velocity = moveInput * moveSpeed;
 
         // Update animator parameters
-      
-        lastMoveDirection = moveInput;
 
         if (moveInput != Vector2.zero)
         {
             lastPosition = transform.position;
-        }
-        HandleAnimation();
 
+        }
+       
+        handleAnimation();
         // Calculate the angle based on moveInput
         float angle = Mathf.Atan2(moveInput.y, moveInput.x) * Mathf.Rad2Deg;
 
@@ -162,46 +161,56 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
-    void HandleAnimation()
+    void handleAnimation()
     {
-        if (direction == 0)
+        // Only play walk animation if character is moving
+        if (moveInput.magnitude > 0)
         {
-            animator.Play(moveInput.magnitude > 0 ? walkRight : idleRight);
-        }
-        else if (direction == 1)
-        {
-            animator.Play(moveInput.magnitude > 0 ? walkUp : idleUp);
-        }
-        else if (direction == 2)
-        {
-            animator.Play(moveInput.magnitude > 0 ? walkUp : idleUp);
-        }
-        else if (direction == 3)
-        {
-            animator.Play(moveInput.magnitude > 0 ? walkUp : idleUp);
-        }
-        else if (direction == 4)
-        {
-            animator.Play(moveInput.magnitude > 0 ? walkLeft : idleLeft);
-        }
-        else if (direction == 5)
-        {
-            animator.Play(moveInput.magnitude > 0 ? walkDown : idleDown);
-        }
-        else if (direction == 6)
-        {
-            animator.Play(moveInput.magnitude > 0 ? walkDown : idleDown);
-        }
-        else if (direction == 7)
-        {
-            animator.Play(moveInput.magnitude > 0 ? walkDown : idleDown);
+            switch (direction)
+            {
+                case 0:
+                    animator.Play(walkRight);
+                    lastMoveDirection = Vector2.right;
+                    break;
+                case 1:
+                case 2:
+                case 3:
+                    animator.Play(walkUp);
+                    lastMoveDirection = Vector2.up;
+                    break;
+                case 4:
+                    animator.Play(walkLeft);
+                    lastMoveDirection = Vector2.left;
+                    break;
+                case 5:
+                case 6:
+                case 7:
+                    animator.Play(walkDown);
+                    lastMoveDirection = Vector2.down;
+                    break;
+            }
         }
         else
         {
-            animator.Play(idleUp);
+            // Play idle animation based on last move direction
+            if (lastMoveDirection == Vector2.right)
+            {
+                animator.Play(idleRight);
+            }
+            else if (lastMoveDirection == Vector2.up)
+            {
+                animator.Play(idleUp);
+            }
+            else if (lastMoveDirection == Vector2.left)
+            {
+                animator.Play(idleLeft);
+            }
+            else if (lastMoveDirection == Vector2.down)
+            {
+                animator.Play(idleDown);
+            }
         }
     }
-
     public void AddCoins(int amount)
     {
         coins += amount;
