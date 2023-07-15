@@ -56,7 +56,7 @@ public class PlayerMovement : MonoBehaviour
 
         lineRenderer.startWidth = raycastLineWidthstart;
        // lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
-        //lineRenderer.material.SetColor("_Color", rayColor);
+//lineRenderer.material = Resources.Load<Material>("LaserMat");
         lineRenderer.enabled = false;
 
 
