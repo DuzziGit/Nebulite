@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -20,8 +21,13 @@ public class PlayerMovement : MonoBehaviour
     public GameObject laserStartPoint;
 
     public GameObject timerController;
+	public UIController uiController;
 
-    public float laserLength = 5f;
+	public TMP_Text mat1;
+	public TMP_Text mat2;
+
+
+	public float laserLength = 5f;
 
     public float moveSpeed;
     public Rigidbody2D rb2d;
@@ -174,7 +180,18 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
         }
-    }
+
+		if (playerMaterials.ContainsKey("Asteroid"))
+		{
+			mat1.text = playerMaterials["Asteroid"].ToString();
+		}
+
+		if (playerMaterials.ContainsKey("Mushroom"))
+		{
+			mat2.text = playerMaterials["Mushroom"].ToString();
+		}
+
+	}
 
     void handleAnimation()
     {
