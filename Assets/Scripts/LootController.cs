@@ -41,11 +41,14 @@ public class LootController : MonoBehaviour
         // If the loot has reached the player
         if (distance <= 0)
         {
-            // Add the loot's value to the player's coins
-            playerTransform.GetComponent<PlayerMovement>().AddCoins(value);
+            // Get the PlayerMovement component
+            PlayerMovement playerMovement = playerTransform.GetComponent<PlayerMovement>();
 
-            // Add the loot's type and value to the player's materials
-            playerTransform.GetComponent<PlayerMovement>().AddMaterial(materialType, value);
+            // Add the loot's value to the player's coins
+            playerMovement.AddCoins(value);
+
+            // Add the material to the player's materials
+            playerMovement.AddMaterial(materialType);
 
             // Destroy the loot
             Destroy(gameObject);

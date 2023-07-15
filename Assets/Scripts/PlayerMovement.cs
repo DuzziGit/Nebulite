@@ -47,7 +47,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 lastPosition;
     private int coins = 0;
     private int direction = 0;
-    private Dictionary<string, int> materials = new Dictionary<string, int>();
+    public Dictionary<string, int> playerMaterials = new Dictionary<string, int>();
 
     void Start()
     {
@@ -250,15 +250,20 @@ public class PlayerMovement : MonoBehaviour
         coins += amount;
     }
 
-    public void AddMaterial(string type, int amount)
+    public void AddMaterial(string materialType)
     {
-        if (!materials.ContainsKey(type))
+        if (playerMaterials.ContainsKey(materialType))
         {
-            materials[type] = 0;
+            // If the material is already in the dictionary, increment the count
+            playerMaterials[materialType]++;
         }
-        materials[type] += amount;
+        else
+        {
+            // Otherwise, add the material to the dictionary with a count of 1
+            playerMaterials.Add(materialType, 1);
+        }
+        Debug.Log("Material: " + materialType + ", Count: " + playerMaterials[materialType]);
 
-        Debug.Log($"Added {amount} of {type}. Current total: {materials[type]} and Coins {coins}");
     }
     public bool TryUpgrade(string property, int cost, float upgradeAmount)
     {
