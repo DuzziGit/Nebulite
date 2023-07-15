@@ -224,7 +224,6 @@ public class PlayerMovement : MonoBehaviour
         }
         materials[type] += amount;
     }
-
     public bool TryUpgrade(string property, int cost, float upgradeAmount)
     {
         // Check if player has enough coins
@@ -238,6 +237,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 case "laserLength":
                     laserLength += upgradeAmount;
+                    raycastDistance += upgradeAmount; // Update the raycast distance along with the visual laser length
                     break;
                 case "damageAmount":
                     damageAmount += (int)upgradeAmount;  // assuming that damageAmount should remain an integer
