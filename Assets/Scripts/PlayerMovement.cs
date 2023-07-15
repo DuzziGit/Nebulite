@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -16,6 +18,11 @@ public class PlayerMovement : MonoBehaviour
     public GameObject laserStartPoint;
 
     public GameObject timerController;
+    public UIController uiController;
+
+
+    public TMP_Text mat1Text;
+    public TMP_Text mat2Text;
 
     public float laserLength = 5f;
 
@@ -56,7 +63,11 @@ public class PlayerMovement : MonoBehaviour
 
 
         //GetComponent
-    }
+
+        mat1Text.text = "0";
+        mat2Text.text = "0";
+
+	}
 
     void Update()
     {
@@ -301,6 +312,13 @@ public class PlayerMovement : MonoBehaviour
 	public void TimeHasRunOut()
 	{
       //  Debug.Log("Time has run out!!!");
-	}
+      rb2d.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezePositionX;
+        uiController.Fade();
+    
+    
+    }
+
+
+
 
 }
