@@ -224,4 +224,66 @@ public class PlayerMovement : MonoBehaviour
         }
         materials[type] += amount;
     }
+
+    public bool TryUpgrade(string property, int cost, float upgradeAmount)
+    {
+        // Check if player has enough coins
+        if (coins >= cost)
+        {
+            // Subtract cost
+            coins -= cost;
+
+            // Upgrade the desired property
+            switch (property)
+            {
+                case "laserLength":
+                    laserLength += upgradeAmount;
+                    break;
+                case "damageAmount":
+                    damageAmount += (int)upgradeAmount;  // assuming that damageAmount should remain an integer
+                    break;
+                case "moveSpeed":
+                    moveSpeed += upgradeAmount;
+                    break;
+                default:
+                    Debug.LogWarning("Unknown property: " + property);
+                    return false;
+            }
+
+            return true;
+        }
+        else
+        {
+            Debug.Log("Not enough coins for upgrade");
+            Debug.Log("Upgrade failed");
+
+            return false;
+        }
+    }
+    public void upgradeDamage()
+    {
+        if (TryUpgrade("damageAmount", 100, 2))
+        {
+            Debug.Log("Upgrade succeeded");
+            Debug.Log("Damage Amount = " + damageAmount);
+        }
+    }
+
+    public void upgradeLaserLength()
+    {
+        if (TryUpgrade("laserLength", 100, 1))
+        {
+            Debug.Log("Upgrade succeeded");
+            Debug.Log("Laser Length = " + laserLength);
+        }
+    }
+
+    public void upgradeMoveSpeed()
+    {
+        if (TryUpgrade("moveSpeed", 100, 1))
+        {
+            Debug.Log("Upgrade succeeded");
+            Debug.Log("moveSpeed = " + moveSpeed);
+        }
+    }
 }

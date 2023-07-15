@@ -34,7 +34,7 @@ public class TimerController : MonoBehaviour
 
         if (time_remaining <= 0)
         {
-            Debug.Log("Time Remaining: " + time_remaining);
+           // Debug.Log("Time Remaining: " + time_remaining);
             TimeHasRunOut();
         }
     }
