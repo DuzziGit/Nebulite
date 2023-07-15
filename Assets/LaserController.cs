@@ -4,30 +4,14 @@ using UnityEngine;
 
 public class LaserController : MonoBehaviour
 {
-    public enum LaserDirection
-    {
-        North,
-        NorthEast,
-        East,
-        SouthEast,
-        South,
-        SouthWest,
-        West,
-        NorthWest
-    }
 
-    [System.Serializable]
-    public struct DirectionalSprite
-    {
-        public LaserDirection direction;
-        public Sprite sprite;
-    }
+
+
 
     public float radius;
     public float speed;
     public GameObject player;
     public SpriteRenderer spriteRenderer;
-    public DirectionalSprite[] directionSprites;
 
     private Vector3 mousePosition;
     private float angle;
@@ -42,40 +26,35 @@ public class LaserController : MonoBehaviour
     {
         mousePosition = Input.mousePosition;
         mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
-
         Vector2 direction = new Vector2(
-            mousePosition.x - transform.position.x,
-            mousePosition.y - transform.position.y
+            mousePosition.x - player.transform.position.x,
+            mousePosition.y - player.transform.position.y
         );
 
-        transform.up = direction;
+        // Check if the direction vector's magnitude is greater than the deadzone value
+        float distanceToPlayer = Vector2.Distance(player.transform.position, mousePosition);
+        float deadzone = 0.1f; // Adjust this to suit your needs
 
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        if (angle < 0)
+        if (distanceToPlayer > deadzone)
         {
-            angle += 360;
+            // Normalize the direction vector so its length is 1
+            direction = direction.normalized;
+
+            // Calculate the new position of the laser, which is in the direction of the mouse but capped at the radius
+            Vector3 laserPosition = player.transform.position + (Vector3)direction * Mathf.Min(distanceToPlayer, radius);
+
+            // Rotate and position the laser
+            transform.up = direction;
+            transform.position = laserPosition;
+
+            // Calculate the angle and sprite based on the direction
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            if (angle < 0) angle += 360;
+
+          
         }
-
-        LaserDirection directionIndex = (LaserDirection)(Mathf.FloorToInt(angle / 45) % 8);
-        Sprite spriteToUse = null;
-
-        for (int i = 0; i < directionSprites.Length; i++)
-        {
-            if (directionSprites[i].direction == directionIndex)
-            {
-                spriteToUse = directionSprites[i].sprite;
-                break;
-            }
-        }
-
-        if (spriteToUse != null)
-        {
-            spriteRenderer.sprite = spriteToUse;
-        }
-
-        // Keep laser at a constant distance from player
-        transform.position = player.transform.position + (transform.up * radius);
     }
+
 
     void OnDrawGizmos()
     {
