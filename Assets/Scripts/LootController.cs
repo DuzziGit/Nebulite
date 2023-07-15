@@ -1,6 +1,4 @@
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
 public class LootController : MonoBehaviour
 {
@@ -14,28 +12,39 @@ public class LootController : MonoBehaviour
 
     void Start()
     {
-        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        // Find the player object and get its transform
+        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+        playerTransform = playerObject.transform;
+
+        // Get the PlayerMovement component attached to the player object
+        PlayerMovement playerMovement = playerObject.GetComponent<PlayerMovement>();
+
+        // Increase the attraction speed by 1 using the player's moveSpeed property
+        if (playerMovement != null)
+        {
+           attractionSpeed = playerMovement.moveSpeed + 1;
+        }
     }
 
     void Update()
     {
-        // calculate the distance from the player
+        // Calculate the distance from the player
         float distance = Vector2.Distance(playerTransform.position, transform.position);
 
-        // if the loot is within the attraction radius
+        // If the loot is within the attraction radius
         if (distance <= attractionRadius)
         {
-            // move the loot towards the player
+            // Move the loot towards the player
             transform.position = Vector2.MoveTowards(transform.position, playerTransform.position, attractionSpeed * Time.deltaTime);
         }
 
-        // if the loot has reached the player
+        // If the loot has reached the player
         if (distance <= 0)
         {
-            // add the loot's value to the player's coins
+            // Add the loot's value to the player's coins
             playerTransform.GetComponent<PlayerMovement>().AddCoins(value);
 
-            // destroy the loot
+            // Destroy the loot
             Destroy(gameObject);
         }
     }
