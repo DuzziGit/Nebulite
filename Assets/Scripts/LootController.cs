@@ -44,10 +44,14 @@ public class LootController : MonoBehaviour
             // Add the loot's value to the player's coins
             playerTransform.GetComponent<PlayerMovement>().AddCoins(value);
 
+            // Add the loot's type and value to the player's materials
+            playerTransform.GetComponent<PlayerMovement>().AddMaterial(materialType, value);
+
             // Destroy the loot
             Destroy(gameObject);
         }
     }
+
 
     void OnDrawGizmosSelected()
     {
