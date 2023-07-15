@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Material
+  - Count1
+  - Count2
+  - Door
   layers:
   - Default
   - TransparentFX

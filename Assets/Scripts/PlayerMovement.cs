@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-
+using UnityEngine.SceneManagement;
 public class PlayerMovement : MonoBehaviour
 {
     const string idleUp = "IdleAnimUp";
@@ -52,6 +52,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 lastMoveDirection;
     private Vector3 lastPosition;
     private int coins = 0;
+    private int TotalCoins = 0;
     private int direction = 0;
     public Dictionary<string, int> playerMaterials = new Dictionary<string, int>();
 
@@ -350,5 +351,19 @@ public class PlayerMovement : MonoBehaviour
 	{
       //  Debug.Log("Time has run out!!!");
 	}
-   
+
+
+
+    void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.CompareTag("Door") && Input.GetKey(KeyCode.E))
+        {
+            TotalCoins += coins;
+            Debug.Log("TotalCoins:" + TotalCoins);
+            coins = 0;
+            Debug.Log("Temp coins erased " + coins);
+            SceneManager.LoadScene(0);
+           
+        }
+    }
 }
