@@ -18,6 +18,8 @@ public class TimerController : MonoBehaviour
 
 	public PlayerMovement playerMovement;
 
+    public bool timerPaused = false;
+
 
 
 
@@ -37,21 +39,22 @@ public class TimerController : MonoBehaviour
 
     void Update()
     {
-      //  Debug.Log(playerTime);
-		
-        
-        if(time_remaining > 0)
-		{
-            time_remaining -= Time.deltaTime;
-            timer_foreground.fillAmount = time_remaining / max_time;
-
-		}
-
-        if (time_remaining <= 0)
+        //  Debug.Log(playerTime);
+        if (!timerPaused)
         {
-			// Debug.Log("Time Remaining: " + time_remaining);
-			playerMovement.TimeHasRunOut();
-		}
+            if (time_remaining > 0)
+            {
+                time_remaining -= Time.deltaTime;
+                timer_foreground.fillAmount = time_remaining / max_time;
+
+            }
+
+            if (time_remaining <= 0)
+            {
+                // Debug.Log("Time Remaining: " + time_remaining);
+                playerMovement.TimeHasRunOut();
+            }
+        }
     }
 
 }

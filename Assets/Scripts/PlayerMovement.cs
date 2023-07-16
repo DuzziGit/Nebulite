@@ -364,7 +364,9 @@ public class PlayerMovement : MonoBehaviour
 
 	public void TimeHasRunOut()
 	{
-      //  Debug.Log("Time has run out!!!");
+        Debug.Log("Time has run out!!!");
+        rb2d.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
+		uiController.PlayerLoss();
 	}
 
 
@@ -378,12 +380,19 @@ public class PlayerMovement : MonoBehaviour
             coins = 0;
             Debug.Log("Temp coins erased: " + coins);
             SceneManager.LoadScene(0);
-
-            // Find the DeathInfoUI object
-            GameObject deathInfoUI = transform.Find("DeathInfoUI").gameObject;
-
-            // Disable the DeathInfoUI object
-            deathInfoUI.SetActive(true);
+            DisplayDeathInfoUI();
+           
         }
     }
+
+  public void DisplayDeathInfoUI()
+    {
+
+      
+		// Find the DeathInfoUI object
+		GameObject deathInfoUI = transform.Find("DeathInfoUI").gameObject;
+
+		// Disable the DeathInfoUI object
+		deathInfoUI.SetActive(true);
+	}
 }

@@ -8,24 +8,35 @@ public class UIController : MonoBehaviour
 {
 	public GameObject blackSquare;
 	public GameObject lossText;
+	public Button continueButton;
 
-	// Update is called once per frame
-	/*void Update()
+	public GameObject materialBar;
+	public GameObject linearHolder;
+	public PlayerMovement playerMovement;
+	public TimerController timerController;
+
+
+	void Start()
 	{
-		if (Input.GetKeyDown(KeyCode.A))
-		{
-			StartCoroutine(FadeBlackOutSquare());
-		}
-		if (Input.GetKeyDown(KeyCode.S))
-		{
-			StartCoroutine(FadeBlackOutSquare(false));
-		}
+		continueButton.onClick.AddListener(OnClick);
 	}
-	*/
 
-	public void Fade()
+	void OnClick()
+	{
+		Debug.Log("Button Clicked");
+		lossText.SetActive(false);
+		continueButton.gameObject.SetActive(false);
+		playerMovement.DisplayDeathInfoUI();
+	}
+	
+
+	public void PlayerLoss()
 	{
 		Debug.Log("Fade Called");
+		timerController.timerPaused = true;
+		materialBar.SetActive(false);
+		linearHolder.SetActive(false);
+		timerController.
 		StartCoroutine(FadeBlackOutSquare());
 		StartCoroutine(WaitText());
 		
@@ -35,6 +46,8 @@ public class UIController : MonoBehaviour
 	{
 		yield return new WaitForSeconds(2);
 		lossText.SetActive(true);
+		yield return new WaitForSeconds(1);
+		continueButton.gameObject.SetActive(true);
 	}
 
 	public IEnumerator FadeBlackOutSquare(bool fadeToBlack = true, int fadeSpeed = 1)
