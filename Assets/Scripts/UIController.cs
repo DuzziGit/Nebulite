@@ -81,8 +81,8 @@ public class UIController : MonoBehaviour
 		lossText.SetActive(true);
 		yield return new WaitForSeconds(1);
 		continueButtonLose.gameObject.SetActive(true);
+		playerMovement.WipeMaterials();
 
-		
 		playerMovement.Reposition();
 	}
 

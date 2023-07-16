@@ -375,6 +375,9 @@ public class PlayerMovement : MonoBehaviour
 	public void TimeHasRunOut()
 	{
 		Freeze();
+
+       
+
 		uiController.PlayerLoss();
 		
 	}
@@ -438,5 +441,19 @@ public class PlayerMovement : MonoBehaviour
     public void Reposition()
     {
 		transform.position = startPos;
+	}
+
+
+    public void WipeMaterials()
+    {
+		playerMaterials.Clear();
+
+
+		mat1GuiCount.text = "0";
+		mat1EndCount.text = "0";
+
+		mat2GuiCount.text = "0";
+		mat2EndCount.text = "0";
+
 	}
 }
