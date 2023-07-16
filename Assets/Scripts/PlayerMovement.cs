@@ -23,8 +23,14 @@ public class PlayerMovement : MonoBehaviour
     public GameObject timerController;
 	public UIController uiController;
 
-	public TMP_Text mat1;
-	public TMP_Text mat2;
+	public TMP_Text mat1GuiCount;
+	public TMP_Text mat2GuiCount;
+	
+    
+    public TMP_Text mat1EndCount;
+	public TMP_Text mat2EndCount;
+
+
 
 
 	public float laserLength = 5f;
@@ -199,12 +205,14 @@ public class PlayerMovement : MonoBehaviour
 
 		if (playerMaterials.ContainsKey("Asteroid"))
 		{
-			mat1.text = playerMaterials["Asteroid"].ToString();
+			mat1GuiCount.text = playerMaterials["Asteroid"].ToString();
+			mat1EndCount.text = playerMaterials["Asteroid"].ToString();
 		}
 
 		if (playerMaterials.ContainsKey("Mushroom"))
 		{
-			mat2.text = playerMaterials["Mushroom"].ToString();
+			mat2GuiCount.text = playerMaterials["Mushroom"].ToString();
+			mat2EndCount.text = playerMaterials["Mushroom"].ToString();
 		}
 
 	}
