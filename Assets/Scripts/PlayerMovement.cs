@@ -5,11 +5,11 @@ using TMPro;
 using UnityEngine.SceneManagement;
 public class PlayerMovement : MonoBehaviour
 {
+   // Constants
     const string idleUp = "IdleAnimUp";
     const string idleDown = "IdleAnimDown";
     const string idleRight = "IdleAnimRight";
     const string idleLeft = "IdleAnimLeft";
-
     const string walkUp = "WalkUp";
     const string walkDown = "WalkDown";
     const string walkRight = "WalkSideRight";
@@ -18,69 +18,68 @@ public class PlayerMovement : MonoBehaviour
     const string walkUpLeft = "WalkUpLeft";
     const string walkDownRight = "WalkDownRight";
     const string walkDownLeft = "WalkDownLeft";
+
+    // UI References
     public GameObject laserStartPoint;
-
     public GameObject timerController;
-	public UIController uiController;
-
-	public TMP_Text mat1GuiCount;
-	public TMP_Text mat2GuiCount;
-	public TMP_Text mat3GuiCount;
-	public TMP_Text mat4GuiCount;
-	public TMP_Text mat5GuiCount;
-
-    
+    public UIController uiController;
+    public TMP_Text mat1GuiCount;
+    public TMP_Text mat2GuiCount;
+    public TMP_Text mat3GuiCount;
+    public TMP_Text mat4GuiCount;
+    public TMP_Text mat5GuiCount;
     public TMP_Text mat1EndCount;
-	public TMP_Text mat2EndCount;
-	public TMP_Text mat3EndCount;
-	public TMP_Text mat4EndCount;
-	public TMP_Text mat5EndCount;
-
+    public TMP_Text mat2EndCount;
+    public TMP_Text mat3EndCount;
+    public TMP_Text mat4EndCount;
+    public TMP_Text mat5EndCount;
     public TMP_Text coinText;
     public TMP_Text coinEndCount;
     public TMP_Text coinUpgradeCount;
+    public TMP_Text levelDamage;
+    public TMP_Text levelSpeed;
+    public TMP_Text levelRange;
 
+    // Upgrade Levels and Max Levels
+    private int damageLevel = 1;
+    private int speedLevel = 1;
+    private int rangeLevel = 1;
+    private int maxDamageLevel = 10;
+    private int maxSpeedLevel = 10;
+    private int maxRangeLevel = 10;
 
-
-
-
-
-
-	public float laserLength = 5f;
-
+    // Player Properties
+    public float laserLength = 5f;
     public float moveSpeed;
-    public Rigidbody2D rb2d;
+    public int damageAmount = 1;
+    public float attackInterval = 0.5f;
+    public float time = 10.0f; 
+    // Player State
     private Vector2 moveInput;
+    private int coins = 0;
+    private int TotalCoins = 0;
+    private int direction = 0;
+    private bool isAttacking = false;
+    private float attackTimer = 0f;
+
+    // Other
+    public Rigidbody2D rb2d;
     public LayerMask materialLayer;
     public float raycastDistance = 5f;
     public float raycastLineWidthstart = 0.2f;
     public float raycastLineWidthend = 0.1f;
     public Color rayColor = Color.red;
-
-    public int damageAmount = 1;
-    public float attackInterval = 0.5f;
-    public float time = 10.0f; //We Should change the name of this later
-
-
-    // public Color rayColor = Color.red;
     public Animator animator;
-
-    private bool isAttacking = false;
-    private float attackTimer = 0f;
     public LineRenderer lineRenderer;
     private Vector2 lastMoveDirection;
     private Vector3 lastPosition;
-    private int coins = 0;
-    private int TotalCoins = 0;
-    private int direction = 0;
     public Dictionary<string, int> playerMaterials = new Dictionary<string, int>();
     public static PlayerMovement Instance;
     public TMP_Text upgradeMessageText; // New UI text element for upgrade messages
-
     Vector2 startPos;
 
 
-  void Awake() 
+   void Awake() 
     {
         if (Instance == null)
         {
@@ -92,99 +91,91 @@ public class PlayerMovement : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
     void Start()
     {
-        // Find or create a LineRenderer component
         DontDestroyOnLoad(gameObject);
-
-
         lineRenderer.startWidth = raycastLineWidthstart;
-       // lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
-//lineRenderer.material = Resources.Load<Material>("LaserMat");
         lineRenderer.enabled = false;
-
-		rb2d.constraints = RigidbodyConstraints2D.FreezeRotation;
-		startPos = transform.position;
+        rb2d.constraints = RigidbodyConstraints2D.FreezeRotation;
+        startPos = transform.position;
     }
 
     void Update()
     {
+        UpdatePlayerUI();
+        HandlePlayerMovement();
+        HandlePlayerAction();
+        UpdateMaterialCounts();
+    }
 
+    void UpdatePlayerUI()
+    {
         coinText.text = TotalCoins.ToString();
         coinEndCount.text = TotalCoins.ToString();
         coinUpgradeCount.text = TotalCoins.ToString();
         lineRenderer.endWidth = raycastLineWidthend;
+    }
 
+    void HandlePlayerMovement()
+    {
         moveInput.x = Input.GetAxisRaw("Horizontal");
         moveInput.y = Input.GetAxisRaw("Vertical");
         moveInput.Normalize();
-
         rb2d.velocity = moveInput * moveSpeed;
-
-        // Update animator parameters
 
         if (moveInput != Vector2.zero)
         {
             lastPosition = transform.position;
-
         }
 
         handleAnimation();
-        // Calculate the angle based on moveInput
         float angle = Mathf.Atan2(moveInput.y, moveInput.x) * Mathf.Rad2Deg;
 
-        // Set the corresponding animator parameter based on the angle
         if (angle >= -22.5f && angle < 22.5f)
         {
-            // Right
             direction = 0;
         }
         else if (angle >= 22.5f && angle < 67.5f)
         {
-            // Up Right
             direction = 1;
         }
         else if (angle >= 67.5f && angle < 112.5f)
         {
-            // Up
             direction = 2;
         }
         else if (angle >= 112.5f && angle < 157.5f)
         {
-            // Up Left
             direction = 3;
         }
         else if (angle >= 157.5f || angle < -157.5f)
         {
-            // Left
             direction = 4;
         }
         else if (angle >= -157.5f && angle < -112.5f)
         {
-            // Down Left
             direction = 5;
         }
         else if (angle >= -112.5f && angle < -67.5f)
         {
-            // Down
             direction = 6;
         }
         else if (angle >= -67.5f && angle < -22.5f)
         {
-            // Down Right
             direction = 7;
         }
         else
         {
             animator.SetBool("IsWalking", false);
         }
+    }
 
-        // Aim towards the mouse position
+    void HandlePlayerAction()
+    {
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 directionToMouse = (mousePosition - transform.position).normalized;
         Vector2 aimDirection = directionToMouse;
 
-        // Attack control
         if (Input.GetMouseButton(0))
         {
             isAttacking = true;
@@ -202,8 +193,6 @@ public class PlayerMovement : MonoBehaviour
             lineRenderer.enabled = false;
         }
 
-
-        // Attacking and damaging the material
         if (isAttacking)
         {
             attackTimer += Time.deltaTime;
@@ -222,38 +211,36 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
         }
+    }
 
-	if (playerMaterials.ContainsKey("Asteroid"))
-{
-    mat1GuiCount.text = playerMaterials["Asteroid"].ToString();
-    mat1EndCount.text = playerMaterials["Asteroid"].ToString();
-}
-
-if (playerMaterials.ContainsKey("Mushroom"))
-{
-    mat2GuiCount.text = playerMaterials["Mushroom"].ToString();
-    mat2EndCount.text = playerMaterials["Mushroom"].ToString();
-}
-
-if (playerMaterials.ContainsKey("Geode"))
-{
-    mat3GuiCount.text = playerMaterials["Geode"].ToString();
-    mat3EndCount.text = playerMaterials["Geode"].ToString();
-}
-
-if (playerMaterials.ContainsKey("Relic"))
-{
-    mat4GuiCount.text = playerMaterials["Relic"].ToString();
-    mat4EndCount.text = playerMaterials["Relic"].ToString();
-}
-
-if (playerMaterials.ContainsKey("Petal"))
-{
-    mat5GuiCount.text = playerMaterials["Petal"].ToString();
-    mat5EndCount.text = playerMaterials["Petal"].ToString();
-}
-	}
-
+    void UpdateMaterialCounts()
+    {
+        if (playerMaterials.ContainsKey("Asteroid"))
+        {
+            mat1GuiCount.text = playerMaterials["Asteroid"].ToString();
+            mat1EndCount.text = playerMaterials["Asteroid"].ToString();
+        }
+        if (playerMaterials.ContainsKey("Mushroom"))
+        {
+            mat2GuiCount.text = playerMaterials["Mushroom"].ToString();
+            mat2EndCount.text = playerMaterials["Mushroom"].ToString();
+        }
+        if (playerMaterials.ContainsKey("Geode"))
+        {
+            mat3GuiCount.text = playerMaterials["Geode"].ToString();
+            mat3EndCount.text = playerMaterials["Geode"].ToString();
+        }
+        if (playerMaterials.ContainsKey("Relic"))
+        {
+            mat4GuiCount.text = playerMaterials["Relic"].ToString();
+            mat4EndCount.text = playerMaterials["Relic"].ToString();
+        }
+        if (playerMaterials.ContainsKey("Petal"))
+        {
+            mat5GuiCount.text = playerMaterials["Petal"].ToString();
+            mat5EndCount.text = playerMaterials["Petal"].ToString();
+        }
+    }
     void handleAnimation()
     {
         // Only play walk animation if character is moving
@@ -385,13 +372,18 @@ if (playerMaterials.ContainsKey("Petal"))
             return false;
         }
     }
-     public void upgradeDamage()
+      public void upgradeDamage()
     {
-        if (TryUpgrade("damageAmount", 100, 2))
+        if (damageLevel >= maxDamageLevel) return;
+        int cost = 100 * damageLevel; 
+        float upgradeAmount = 2f / damageLevel; 
+        if (TryUpgrade("damageAmount", cost, upgradeAmount))
         {
+            damageLevel++; 
             coinUpgradeCount.text = TotalCoins.ToString();
             upgradeMessageText.text = "Upgrade succeeded! Damage Amount = " + damageAmount;
             upgradeMessageText.color = Color.green;
+            levelDamage.text = "Damage " + damageAmount;
         }
         else
         {
@@ -402,11 +394,16 @@ if (playerMaterials.ContainsKey("Petal"))
 
     public void upgradeLaserLength()
     {
-        if (TryUpgrade("laserLength", 100, 1))
+        if (rangeLevel >= maxRangeLevel) return;
+        int cost = 100 * rangeLevel; 
+        float upgradeAmount = 1f / rangeLevel;
+        if (TryUpgrade("laserLength", cost, upgradeAmount))
         {
+            rangeLevel++;
             coinUpgradeCount.text = TotalCoins.ToString();
             upgradeMessageText.text = "Upgrade succeeded! Laser Length = " + laserLength;
             upgradeMessageText.color = Color.green;
+            levelRange.text = "Range " + laserLength;
         }
         else
         {
@@ -417,11 +414,16 @@ if (playerMaterials.ContainsKey("Petal"))
 
     public void upgradeMoveSpeed()
     {
-        if (TryUpgrade("moveSpeed", 100, 1))
+        if (speedLevel >= maxSpeedLevel) return;
+        int cost = 100 * speedLevel; 
+        float upgradeAmount = 1f / speedLevel;
+        if (TryUpgrade("moveSpeed", cost, upgradeAmount))
         {
+            speedLevel++;
             coinUpgradeCount.text = TotalCoins.ToString();
             upgradeMessageText.text = "Upgrade succeeded! Move Speed = " + moveSpeed;
             upgradeMessageText.color = Color.green;
+            levelSpeed.text = "Speed " + moveSpeed;
         }
         else
         {
