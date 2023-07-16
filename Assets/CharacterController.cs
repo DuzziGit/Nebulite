@@ -12,6 +12,13 @@ public class CharacterController : MonoBehaviour
         lineRenderer.endWidth = 0.05f;
 
         SceneManager.sceneLoaded += OnSceneLoaded;
+         // Get reference to the shipTransform from ShipManager
+        shipTransform = ShipManager.instance.GetShipTransform();
+
+        if (shipTransform == null)
+        {
+            Debug.LogError("Ship Transform not found in the scene!");
+        }
     }
 
     private void OnDestroy()
@@ -21,13 +28,7 @@ public class CharacterController : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Get reference to the shipTransform from ShipManager
-        shipTransform = ShipManager.instance.GetShipTransform();
-
-        if (shipTransform == null)
-        {
-            Debug.LogError("Ship Transform not found in the scene!");
-        }
+       
     }
 
     private void Update()
