@@ -308,7 +308,7 @@ public class PlayerMovement : MonoBehaviour
             // Otherwise, add the material to the dictionary with a count of 1
             playerMaterials.Add(materialType, 1);
         }
-        Debug.Log("Material: " + materialType + ", Count: " + playerMaterials[materialType]);
+       // Debug.Log("Material: " + materialType + ", Count: " + playerMaterials[materialType]);
 
     }
     public bool TryUpgrade(string property, int cost, float upgradeAmount)
@@ -334,7 +334,7 @@ public class PlayerMovement : MonoBehaviour
                     moveSpeed += upgradeAmount;
                     break;
                 default:
-                    Debug.LogWarning("Unknown property: " + property);
+            //        Debug.LogWarning("Unknown property: " + property);
                     return false;
             }
 
@@ -342,7 +342,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            Debug.Log("Not enough coins for upgrade");
+           // Debug.Log("Not enough coins for upgrade");
             Debug.Log("Upgrade failed");
 
             return false;
@@ -391,9 +391,9 @@ public class PlayerMovement : MonoBehaviour
         {
 
 			TotalCoins += coins;
-            Debug.Log("TotalCoins: " + TotalCoins);
+          //  Debug.Log("TotalCoins: " + TotalCoins);
             coins = 0;
-            Debug.Log("Temp coins erased: " + coins);
+          //  Debug.Log("Temp coins erased: " + coins);
 
             coinText.text = TotalCoins.ToString();
             coinEndCount.text = TotalCoins.ToString();
