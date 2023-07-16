@@ -29,7 +29,6 @@ public class UIController : MonoBehaviour
 	{
 		lossText.SetActive(false);
 		continueButtonLose.gameObject.SetActive(false);
-		playerMovement.Respawn();
 		playerMovement.DisplayDeathInfoUI();
 	}
 
@@ -45,6 +44,7 @@ public class UIController : MonoBehaviour
 		timerController.max_time = playerMovement.time;
 		timerController.time_remaining = timerController.max_time;
 		timerController.timerPaused = false;
+		playerMovement.Unfreeze();
 		SceneManager.LoadScene(0);
 
 	}
@@ -59,6 +59,8 @@ public class UIController : MonoBehaviour
 		StartCoroutine(FadeBlackOutSquare());
 		StartCoroutine(WaitTextLoss());
 		
+		
+
 	}
 
 	public void PlayerWin()
@@ -79,6 +81,9 @@ public class UIController : MonoBehaviour
 		lossText.SetActive(true);
 		yield return new WaitForSeconds(1);
 		continueButtonLose.gameObject.SetActive(true);
+
+		
+		playerMovement.Reposition();
 	}
 
 

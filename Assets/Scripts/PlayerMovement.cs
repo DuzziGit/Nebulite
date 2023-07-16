@@ -63,6 +63,8 @@ public class PlayerMovement : MonoBehaviour
     public Dictionary<string, int> playerMaterials = new Dictionary<string, int>();
     public static PlayerMovement Instance;
 
+    Vector2 startPos;
+
 
   void Awake() 
     {
@@ -87,8 +89,8 @@ public class PlayerMovement : MonoBehaviour
 //lineRenderer.material = Resources.Load<Material>("LaserMat");
         lineRenderer.enabled = false;
 
-
-        //GetComponent
+		rb2d.constraints = RigidbodyConstraints2D.FreezeRotation;
+		startPos = transform.position;
     }
 
     void Update()
@@ -372,11 +374,9 @@ public class PlayerMovement : MonoBehaviour
 
 	public void TimeHasRunOut()
 	{
-        Debug.Log("Time has run out!!!");
-        rb2d.constraints = RigidbodyConstraints2D.FreezePositionX;
-        rb2d.constraints = RigidbodyConstraints2D.FreezePositionY;
-        rb2d.constraints = RigidbodyConstraints2D.FreezeRotation;
+		Freeze();
 		uiController.PlayerLoss();
+		
 	}
 
 
@@ -385,12 +385,16 @@ public class PlayerMovement : MonoBehaviour
     {
         if (other.CompareTag("Door") && Input.GetKey(KeyCode.E))
         {
-            TotalCoins += coins;
+
+			TotalCoins += coins;
             Debug.Log("TotalCoins: " + TotalCoins);
             coins = 0;
             Debug.Log("Temp coins erased: " + coins);
-            //SceneManager.LoadScene(0);
-            uiController.PlayerWin();
+
+
+            Freeze();
+			uiController.PlayerWin();
+
            
         }
     }
@@ -404,6 +408,8 @@ public class PlayerMovement : MonoBehaviour
 
 		// Disable the DeathInfoUI object
 		deathInfoUI.SetActive(true);
+
+
 	}
 
 	public void HideDeathInfoUI()
@@ -417,11 +423,20 @@ public class PlayerMovement : MonoBehaviour
 		deathInfoUI.SetActive(false);
 	}
 
-    public void Respawn()
-    {
-        rb2d.constraints &= ~RigidbodyConstraints2D.FreezePositionY;
-        rb2d.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
-	    //rb2d.constraints = RigidbodyConstraints2D
+	public void Freeze()
+	{
+		rb2d.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
 
+	}
+
+	public void Unfreeze()
+    {
+        rb2d.constraints &= RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezePositionY;
+        rb2d.constraints = RigidbodyConstraints2D.FreezeRotation;
+	}
+
+    public void Reposition()
+    {
+		transform.position = startPos;
 	}
 }
