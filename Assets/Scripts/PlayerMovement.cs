@@ -75,6 +75,7 @@ public class PlayerMovement : MonoBehaviour
     private int direction = 0;
     public Dictionary<string, int> playerMaterials = new Dictionary<string, int>();
     public static PlayerMovement Instance;
+    public TMP_Text upgradeMessageText; // New UI text element for upgrade messages
 
     Vector2 startPos;
 
@@ -369,24 +370,33 @@ if (playerMaterials.ContainsKey("Petal"))
                     return false;
             }
 
+                 // Show success message
+            upgradeMessageText.text = "Upgrade succeeded!";
+            upgradeMessageText.color = Color.green;
+
             return true;
         }
         else
         {
-           // Debug.Log("Not enough coins for upgrade");
-            Debug.Log("Upgrade failed");
+            // Show failure message
+            upgradeMessageText.text = "Not enough coins for upgrade";
+            upgradeMessageText.color = Color.red;
 
             return false;
         }
     }
-    public void upgradeDamage()
+     public void upgradeDamage()
     {
         if (TryUpgrade("damageAmount", 100, 2))
         {
-                    coinUpgradeCount.text = TotalCoins.ToString();
-
-            Debug.Log("Upgrade succeeded");
-            Debug.Log("Damage Amount = " + damageAmount);
+            coinUpgradeCount.text = TotalCoins.ToString();
+            upgradeMessageText.text = "Upgrade succeeded! Damage Amount = " + damageAmount;
+            upgradeMessageText.color = Color.green;
+        }
+        else
+        {
+            upgradeMessageText.text = "Upgrade failed! Not enough coins.";
+            upgradeMessageText.color = Color.red;
         }
     }
 
@@ -394,10 +404,14 @@ if (playerMaterials.ContainsKey("Petal"))
     {
         if (TryUpgrade("laserLength", 100, 1))
         {
-                    coinUpgradeCount.text = TotalCoins.ToString();
-
-            Debug.Log("Upgrade succeeded");
-            Debug.Log("Laser Length = " + laserLength);
+            coinUpgradeCount.text = TotalCoins.ToString();
+            upgradeMessageText.text = "Upgrade succeeded! Laser Length = " + laserLength;
+            upgradeMessageText.color = Color.green;
+        }
+        else
+        {
+            upgradeMessageText.text = "Upgrade failed! Not enough coins.";
+            upgradeMessageText.color = Color.red;
         }
     }
 
@@ -405,10 +419,14 @@ if (playerMaterials.ContainsKey("Petal"))
     {
         if (TryUpgrade("moveSpeed", 100, 1))
         {
-                    coinUpgradeCount.text = TotalCoins.ToString();
-
-            Debug.Log("Upgrade succeeded");
-            Debug.Log("moveSpeed = " + moveSpeed);
+            coinUpgradeCount.text = TotalCoins.ToString();
+            upgradeMessageText.text = "Upgrade succeeded! Move Speed = " + moveSpeed;
+            upgradeMessageText.color = Color.green;
+        }
+        else
+        {
+            upgradeMessageText.text = "Upgrade failed! Not enough coins.";
+            upgradeMessageText.color = Color.red;
         }
     }
 
