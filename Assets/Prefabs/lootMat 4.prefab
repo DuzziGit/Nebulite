@@ -125,6 +125,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   value: 50
-  materialType: Asteroid
+  materialType: Relic
   attractionRadius: 5
   attractionSpeed: 3

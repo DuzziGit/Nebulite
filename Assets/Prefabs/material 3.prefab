@@ -414,7 +414,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 35
-  materialKind: Asteroid
+  materialKind: Geode
   materialDropMin: 5
   materialDropMax: 10
   spreadRadius: 1.5

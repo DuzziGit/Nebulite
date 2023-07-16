@@ -125,6 +125,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   value: 25
-  materialType: mat3
+  materialType: Geode
   attractionRadius: 5
   attractionSpeed: 3

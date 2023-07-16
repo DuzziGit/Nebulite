@@ -25,13 +25,23 @@ public class PlayerMovement : MonoBehaviour
 
 	public TMP_Text mat1GuiCount;
 	public TMP_Text mat2GuiCount;
-	
+	public TMP_Text mat3GuiCount;
+	public TMP_Text mat4GuiCount;
+	public TMP_Text mat5GuiCount;
+
     
     public TMP_Text mat1EndCount;
 	public TMP_Text mat2EndCount;
-	
+	public TMP_Text mat3EndCount;
+	public TMP_Text mat4EndCount;
+	public TMP_Text mat5EndCount;
+
     public TMP_Text coinText;
     public TMP_Text coinEndCount;
+
+
+
+
 
 
 
@@ -208,18 +218,35 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-		if (playerMaterials.ContainsKey("Asteroid"))
-		{
-			mat1GuiCount.text = playerMaterials["Asteroid"].ToString();
-			mat1EndCount.text = playerMaterials["Asteroid"].ToString();
-		}
+	if (playerMaterials.ContainsKey("Asteroid"))
+{
+    mat1GuiCount.text = playerMaterials["Asteroid"].ToString();
+    mat1EndCount.text = playerMaterials["Asteroid"].ToString();
+}
 
-		if (playerMaterials.ContainsKey("Mushroom"))
-		{
-			mat2GuiCount.text = playerMaterials["Mushroom"].ToString();
-			mat2EndCount.text = playerMaterials["Mushroom"].ToString();
-		}
+if (playerMaterials.ContainsKey("Mushroom"))
+{
+    mat2GuiCount.text = playerMaterials["Mushroom"].ToString();
+    mat2EndCount.text = playerMaterials["Mushroom"].ToString();
+}
 
+if (playerMaterials.ContainsKey("Geode"))
+{
+    mat3GuiCount.text = playerMaterials["Geode"].ToString();
+    mat3EndCount.text = playerMaterials["Geode"].ToString();
+}
+
+if (playerMaterials.ContainsKey("Relic"))
+{
+    mat4GuiCount.text = playerMaterials["Relic"].ToString();
+    mat4EndCount.text = playerMaterials["Relic"].ToString();
+}
+
+if (playerMaterials.ContainsKey("Petal"))
+{
+    mat5GuiCount.text = playerMaterials["Petal"].ToString();
+    mat5EndCount.text = playerMaterials["Petal"].ToString();
+}
 	}
 
     void handleAnimation()
@@ -459,15 +486,32 @@ public class PlayerMovement : MonoBehaviour
 		mat2GuiCount.text = "0";
 		mat2EndCount.text = "0";
 
+	    mat3GuiCount.text = "0";
+		mat3EndCount.text = "0";
+
+		mat4GuiCount.text = "0";
+		mat4EndCount.text = "0";
+
+        mat5GuiCount.text = "0";
+		mat5EndCount.text = "0";
+
 	}
 
 	public void WipeMaterialsInGame()
 	{
 		playerMaterials.Clear();
 
+		
 		mat1GuiCount.text = "0";
 
 		mat2GuiCount.text = "0";
+
+	    mat3GuiCount.text = "0";
+
+		mat4GuiCount.text = "0";
+        
+        mat5GuiCount.text = "0";
+
 
 	}
 }

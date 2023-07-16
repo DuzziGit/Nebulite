@@ -125,7 +125,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 50
-  materialKind: Asteroid
+  materialKind: Relic
   materialDropMin: 5
   materialDropMax: 10
   spreadRadius: 1.5

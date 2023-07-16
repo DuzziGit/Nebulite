@@ -125,7 +125,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 55
-  materialKind: Asteroid
+  materialKind: Petal
   materialDropMin: 5
   materialDropMax: 10
   spreadRadius: 1.5
