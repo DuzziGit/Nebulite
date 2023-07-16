@@ -8,7 +8,7 @@ public class TimerController : MonoBehaviour
 
     public Image timer_foreground;
 
-    float time_remaining;
+    public float time_remaining;
 
     public float max_time;
 
@@ -27,8 +27,7 @@ public class TimerController : MonoBehaviour
     {
 		playerTime = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().time;
 
-		
-		//playerTime = 
+	
 
 		max_time = playerTime;
 
