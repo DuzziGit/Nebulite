@@ -29,6 +29,9 @@ public class PlayerMovement : MonoBehaviour
     
     public TMP_Text mat1EndCount;
 	public TMP_Text mat2EndCount;
+	
+    public TMP_Text coinText;
+    public TMP_Text coinEndCount;
 
 
 
@@ -376,8 +379,6 @@ public class PlayerMovement : MonoBehaviour
 	{
 		Freeze();
 
-       
-
 		uiController.PlayerLoss();
 		
 	}
@@ -394,7 +395,10 @@ public class PlayerMovement : MonoBehaviour
             coins = 0;
             Debug.Log("Temp coins erased: " + coins);
 
-
+            coinText.text = TotalCoins.ToString();
+            coinEndCount.text = TotalCoins.ToString();
+            
+            WipeMaterialsInGame();
             Freeze();
 			uiController.PlayerWin();
 
@@ -447,13 +451,23 @@ public class PlayerMovement : MonoBehaviour
     public void WipeMaterials()
     {
 		playerMaterials.Clear();
-
+        coins = 0;
 
 		mat1GuiCount.text = "0";
 		mat1EndCount.text = "0";
 
 		mat2GuiCount.text = "0";
 		mat2EndCount.text = "0";
+
+	}
+
+	public void WipeMaterialsInGame()
+	{
+		playerMaterials.Clear();
+
+		mat1GuiCount.text = "0";
+
+		mat2GuiCount.text = "0";
 
 	}
 }

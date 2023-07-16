@@ -14,6 +14,7 @@ public class UIController : MonoBehaviour
 
 	public GameObject materialBar;
 	public GameObject linearHolder;
+	public GameObject coinText;
 	public PlayerMovement playerMovement;
 	public TimerController timerController;
 	
@@ -39,6 +40,7 @@ public class UIController : MonoBehaviour
 		StartCoroutine(FadeBlackOutSquare(false));
 		materialBar.SetActive(true);
 		linearHolder.SetActive(true);
+		coinText.SetActive(true);
 
 
 		timerController.max_time = playerMovement.time;
@@ -55,6 +57,7 @@ public class UIController : MonoBehaviour
 		timerController.timerPaused = true;
 		materialBar.SetActive(false);
 		linearHolder.SetActive(false);
+		coinText.SetActive(false);
 		timerController.
 		StartCoroutine(FadeBlackOutSquare());
 		StartCoroutine(WaitTextLoss());
@@ -70,6 +73,7 @@ public class UIController : MonoBehaviour
 		timerController.timerPaused = true;
 		materialBar.SetActive(false);
 		linearHolder.SetActive(false);
+		coinText.SetActive(false);
 
 
 	}
