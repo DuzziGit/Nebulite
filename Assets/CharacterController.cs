@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CharacterController : MonoBehaviour
 {
@@ -10,15 +11,22 @@ public class CharacterController : MonoBehaviour
         lineRenderer.startWidth = 0.05f;
         lineRenderer.endWidth = 0.05f;
 
-        // Find the GameObject with the name "Ship" and assign its transform to shipTransform
-        GameObject shipObject = GameObject.Find("Ship");
-        if (shipObject != null)
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Get reference to the shipTransform from ShipManager
+        shipTransform = ShipManager.instance.GetShipTransform();
+
+        if (shipTransform == null)
         {
-            shipTransform = shipObject.transform;
-        }
-        else
-        {
-            Debug.LogError("Ship GameObject not found in the scene!");
+            Debug.LogError("Ship Transform not found in the scene!");
         }
     }
 
@@ -28,7 +36,7 @@ public class CharacterController : MonoBehaviour
         if (shipTransform != null)
         {
             // Calculate the position for the line renderer at the character's belly
-            Vector3 bellyPosition = transform.position + new Vector3(0f, -0.5f, 0f);
+            Vector3 bellyPosition = transform.position + new Vector3(0f, -.3f, 0f);
 
             // Update the positions of the line renderer
             lineRenderer.SetPosition(0, bellyPosition);

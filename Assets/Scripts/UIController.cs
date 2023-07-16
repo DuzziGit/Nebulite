@@ -18,6 +18,7 @@ public class UIController : MonoBehaviour
 	public PlayerMovement playerMovement;
 	public TimerController timerController;
 	
+public GameObject upgradeUI;
 
 
 	void Start()
@@ -33,25 +34,27 @@ public class UIController : MonoBehaviour
 		playerMovement.DisplayDeathInfoUI();
 	}
 
-	void OnClickWin()
+	public void OnClickWin()
 	{
 		//continueButtonWin.gameObject.SetActive(false);
 		playerMovement.HideDeathInfoUI();
-		StartCoroutine(FadeBlackOutSquare(false));
-		materialBar.SetActive(true);
-		linearHolder.SetActive(true);
-		coinText.SetActive(true);
+		upgradeUI.SetActive(true);
 
+	}
 
-		timerController.max_time = playerMovement.time;
+	public void Continue(){
+		    upgradeUI.SetActive(false);
+timerController.max_time = playerMovement.time;
 		timerController.time_remaining = timerController.max_time;
 		timerController.timerPaused = false;
 		playerMovement.Unfreeze();
 		SceneManager.LoadScene(0);
+			materialBar.SetActive(true);
+		linearHolder.SetActive(true);
+		coinText.SetActive(true);
+				StartCoroutine(FadeBlackOutSquare(false));
 
 	}
-
-
 	public void PlayerLoss()
 	{
 		timerController.timerPaused = true;
