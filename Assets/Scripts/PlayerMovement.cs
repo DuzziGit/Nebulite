@@ -375,6 +375,7 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log("Time has run out!!!");
         rb2d.constraints = RigidbodyConstraints2D.FreezePositionX;
         rb2d.constraints = RigidbodyConstraints2D.FreezePositionY;
+        rb2d.constraints = RigidbodyConstraints2D.FreezeRotation;
 		uiController.PlayerLoss();
 	}
 
@@ -420,5 +421,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rb2d.constraints &= ~RigidbodyConstraints2D.FreezePositionY;
         rb2d.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
+	    //rb2d.constraints = RigidbodyConstraints2D
+
 	}
 }
