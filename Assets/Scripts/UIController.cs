@@ -3,55 +3,99 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class UIController : MonoBehaviour
 {
 	public GameObject blackSquare;
 	public GameObject lossText;
-	public Button continueButton;
+	public Button continueButtonLose;
+	public Button continueButtonWin;
 
 	public GameObject materialBar;
 	public GameObject linearHolder;
 	public PlayerMovement playerMovement;
 	public TimerController timerController;
+	
 
 
 	void Start()
 	{
-		continueButton.onClick.AddListener(OnClick);
+		continueButtonLose.onClick.AddListener(OnClickLose);
+		continueButtonWin.onClick.AddListener(OnClickWin);
 	}
 
-	void OnClick()
+	void OnClickLose()
 	{
-		Debug.Log("Button Clicked");
 		lossText.SetActive(false);
-		continueButton.gameObject.SetActive(false);
+		continueButtonLose.gameObject.SetActive(false);
+		playerMovement.Respawn();
 		playerMovement.DisplayDeathInfoUI();
 	}
-	
+
+	void OnClickWin()
+	{
+		//continueButtonWin.gameObject.SetActive(false);
+		playerMovement.HideDeathInfoUI();
+		StartCoroutine(FadeBlackOutSquare(false));
+		materialBar.SetActive(true);
+		linearHolder.SetActive(true);
+
+
+		timerController.max_time = playerMovement.time;
+		timerController.time_remaining = timerController.max_time;
+		timerController.timerPaused = false;
+		SceneManager.LoadScene(0);
+
+	}
+
 
 	public void PlayerLoss()
 	{
-		Debug.Log("Fade Called");
 		timerController.timerPaused = true;
 		materialBar.SetActive(false);
 		linearHolder.SetActive(false);
 		timerController.
 		StartCoroutine(FadeBlackOutSquare());
-		StartCoroutine(WaitText());
+		StartCoroutine(WaitTextLoss());
 		
 	}
 
-	IEnumerator WaitText()
+	public void PlayerWin()
+	{
+		StartCoroutine(FadeBlackOutSquare());
+		StartCoroutine(WaitTextWin());
+		timerController.timerPaused = true;
+		materialBar.SetActive(false);
+		linearHolder.SetActive(false);
+
+
+	}
+
+
+	IEnumerator WaitTextLoss()
 	{
 		yield return new WaitForSeconds(2);
 		lossText.SetActive(true);
 		yield return new WaitForSeconds(1);
-		continueButton.gameObject.SetActive(true);
+		continueButtonLose.gameObject.SetActive(true);
+	}
+
+
+	void PlayerWinFunc()
+	{
+		playerMovement.DisplayDeathInfoUI();
+	}
+	IEnumerator WaitTextWin()
+	{
+		yield return new WaitForSeconds(2);
+		playerMovement.DisplayDeathInfoUI();
+
 	}
 
 	public IEnumerator FadeBlackOutSquare(bool fadeToBlack = true, int fadeSpeed = 1)
 	{
+		Debug.Log("Fade");
 		Color objectColor = blackSquare.GetComponent<Image>().color;
 		float fadeAmount;
 
