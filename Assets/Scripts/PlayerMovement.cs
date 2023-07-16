@@ -59,6 +59,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         // Find or create a LineRenderer component
+        DontDestroyOnLoad(gameObject);
 
 
         lineRenderer.startWidth = raycastLineWidthstart;
@@ -359,11 +360,16 @@ public class PlayerMovement : MonoBehaviour
         if (other.CompareTag("Door") && Input.GetKey(KeyCode.E))
         {
             TotalCoins += coins;
-            Debug.Log("TotalCoins:" + TotalCoins);
+            Debug.Log("TotalCoins: " + TotalCoins);
             coins = 0;
-            Debug.Log("Temp coins erased " + coins);
+            Debug.Log("Temp coins erased: " + coins);
             SceneManager.LoadScene(0);
-           
+
+            // Find the DeathInfoUI object
+            GameObject deathInfoUI = transform.Find("DeathInfoUI").gameObject;
+
+            // Disable the DeathInfoUI object
+            deathInfoUI.SetActive(true);
         }
     }
 }
