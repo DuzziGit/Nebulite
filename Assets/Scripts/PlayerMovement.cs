@@ -38,7 +38,7 @@ public class PlayerMovement : MonoBehaviour
 
     public TMP_Text coinText;
     public TMP_Text coinEndCount;
-
+    public TMP_Text coinUpgradeCount;
 
 
 
@@ -108,6 +108,10 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+
+        coinText.text = TotalCoins.ToString();
+        coinEndCount.text = TotalCoins.ToString();
+        coinUpgradeCount.text = TotalCoins.ToString();
         lineRenderer.endWidth = raycastLineWidthend;
 
         moveInput.x = Input.GetAxisRaw("Horizontal");

@@ -51,7 +51,7 @@ timerController.max_time = playerMovement.time;
 		SceneManager.LoadScene(0);
 			materialBar.SetActive(true);
 		linearHolder.SetActive(true);
-		coinText.SetActive(true);
+		//coinText.SetActive(true);
 				StartCoroutine(FadeBlackOutSquare(false));
 
 	}
@@ -60,7 +60,7 @@ timerController.max_time = playerMovement.time;
 		timerController.timerPaused = true;
 		materialBar.SetActive(false);
 		linearHolder.SetActive(false);
-		coinText.SetActive(false);
+		//coinText.SetActive(false);
 		timerController.
 		StartCoroutine(FadeBlackOutSquare());
 		StartCoroutine(WaitTextLoss());
@@ -76,7 +76,7 @@ timerController.max_time = playerMovement.time;
 		timerController.timerPaused = true;
 		materialBar.SetActive(false);
 		linearHolder.SetActive(false);
-		coinText.SetActive(false);
+		//coinText.SetActive(false);
 
 
 	}
