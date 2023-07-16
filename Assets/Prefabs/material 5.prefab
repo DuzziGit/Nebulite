@@ -124,7 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3096719e3e4453940a300d9da6a67647, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 55
+  health: 200
   materialKind: Petal
   materialDropMin: 5
   materialDropMax: 10

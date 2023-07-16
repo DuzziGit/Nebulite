@@ -47,6 +47,9 @@ public class PlayerMovement : MonoBehaviour
     private int maxDamageLevel = 10;
     private int maxSpeedLevel = 10;
     private int maxRangeLevel = 10;
+    public TMP_Text costDamageUpgrade;
+    public TMP_Text costSpeedUpgrade;
+    public TMP_Text costRangeUpgrade;
 
     // Player Properties
     public float laserLength = 5f;
@@ -99,16 +102,24 @@ public class PlayerMovement : MonoBehaviour
         lineRenderer.enabled = false;
         rb2d.constraints = RigidbodyConstraints2D.FreezeRotation;
         startPos = transform.position;
+        UpdateUpgradeCosts();
+
     }
 
     void Update()
     {
+        UpdateUpgradeCosts();
         UpdatePlayerUI();
         HandlePlayerMovement();
         HandlePlayerAction();
         UpdateMaterialCounts();
     }
-
+   void UpdateUpgradeCosts()
+    {
+        costDamageUpgrade.text = "Upgrade Cost: " + (100 * damageLevel).ToString();
+        costSpeedUpgrade.text = "Upgrade Cost: " + (100 * speedLevel).ToString();
+        costRangeUpgrade.text = "Upgrade Cost: " + (100 * rangeLevel).ToString();
+    }
     void UpdatePlayerUI()
     {
         coinText.text = TotalCoins.ToString();
@@ -372,7 +383,7 @@ public class PlayerMovement : MonoBehaviour
             return false;
         }
     }
-      public void upgradeDamage()
+  public void upgradeDamage()
     {
         if (damageLevel >= maxDamageLevel) return;
         int cost = 100 * damageLevel; 
@@ -384,6 +395,7 @@ public class PlayerMovement : MonoBehaviour
             upgradeMessageText.text = "Upgrade succeeded! Damage Amount = " + damageAmount;
             upgradeMessageText.color = Color.green;
             levelDamage.text = "Damage " + damageAmount;
+             UpdateUpgradeCosts();
         }
         else
         {
@@ -392,7 +404,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public void upgradeLaserLength()
+  public void upgradeLaserLength()
     {
         if (rangeLevel >= maxRangeLevel) return;
         int cost = 100 * rangeLevel; 
@@ -404,6 +416,7 @@ public class PlayerMovement : MonoBehaviour
             upgradeMessageText.text = "Upgrade succeeded! Laser Length = " + laserLength;
             upgradeMessageText.color = Color.green;
             levelRange.text = "Range " + laserLength;
+               UpdateUpgradeCosts();
         }
         else
         {
@@ -424,6 +437,7 @@ public class PlayerMovement : MonoBehaviour
             upgradeMessageText.text = "Upgrade succeeded! Move Speed = " + moveSpeed;
             upgradeMessageText.color = Color.green;
             levelSpeed.text = "Speed " + moveSpeed;
+               UpdateUpgradeCosts();
         }
         else
         {
