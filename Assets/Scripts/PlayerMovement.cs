@@ -345,10 +345,10 @@ if (playerMaterials.ContainsKey("Petal"))
     public bool TryUpgrade(string property, int cost, float upgradeAmount)
     {
         // Check if player has enough coins
-        if (coins >= cost)
+        if (TotalCoins >= cost)
         {
             // Subtract cost
-            coins -= cost;
+            TotalCoins -= cost;
 
             // Upgrade the desired property
             switch (property)
@@ -383,6 +383,8 @@ if (playerMaterials.ContainsKey("Petal"))
     {
         if (TryUpgrade("damageAmount", 100, 2))
         {
+                    coinUpgradeCount.text = TotalCoins.ToString();
+
             Debug.Log("Upgrade succeeded");
             Debug.Log("Damage Amount = " + damageAmount);
         }
@@ -392,6 +394,8 @@ if (playerMaterials.ContainsKey("Petal"))
     {
         if (TryUpgrade("laserLength", 100, 1))
         {
+                    coinUpgradeCount.text = TotalCoins.ToString();
+
             Debug.Log("Upgrade succeeded");
             Debug.Log("Laser Length = " + laserLength);
         }
@@ -401,6 +405,8 @@ if (playerMaterials.ContainsKey("Petal"))
     {
         if (TryUpgrade("moveSpeed", 100, 1))
         {
+                    coinUpgradeCount.text = TotalCoins.ToString();
+
             Debug.Log("Upgrade succeeded");
             Debug.Log("moveSpeed = " + moveSpeed);
         }
