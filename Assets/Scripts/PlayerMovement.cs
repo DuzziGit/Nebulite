@@ -55,7 +55,21 @@ public class PlayerMovement : MonoBehaviour
     private int TotalCoins = 0;
     private int direction = 0;
     public Dictionary<string, int> playerMaterials = new Dictionary<string, int>();
+    public static PlayerMovement Instance;
 
+
+  void Awake() 
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else if (Instance != this)
+        {
+            Destroy(gameObject);
+        }
+    }
     void Start()
     {
         // Find or create a LineRenderer component
