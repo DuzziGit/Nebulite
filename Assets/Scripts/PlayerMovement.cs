@@ -39,6 +39,7 @@ public class PlayerMovement : MonoBehaviour
     public TMP_Text levelDamage;
     public TMP_Text levelSpeed;
     public TMP_Text levelRange;
+    public TMP_Text depositText; 
 
     // Upgrade Levels and Max Levels
     private int damageLevel = 1;
@@ -472,8 +473,22 @@ public class PlayerMovement : MonoBehaviour
             WipeMaterialsInGame();
             Freeze();
 			uiController.PlayerWin();
-
            
+        }
+    }
+ void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Door"))
+        {
+            depositText.gameObject.SetActive(true);
+        }
+    }
+   
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Door"))
+        {
+            depositText.gameObject.SetActive(false);
         }
     }
 

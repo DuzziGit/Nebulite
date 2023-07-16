@@ -124,7 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 886cf103090945343a6ae222b7e8a337, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  value: 15
+  value: 4
   materialType: Mushroom
   attractionRadius: 5
   attractionSpeed: 4
