@@ -8,13 +8,13 @@ public class EnemyController : MonoBehaviour
     public float moveSpeed = 5f;
     public float attackRange = 1f;
     public float attackCooldown = 2f;
+    public float KBForce =2f;
     public GameObject player;
     private bool isShaking = false; // flag to indicate if the material is currently shaking
     private bool canAttack = true; // flag to indicate if the enemy can attack
     private bool isMoving = true; // flag to indicate if the enemy is moving
     public EnemySpawner EnemySpawner;
     private Vector3 originalPosition;
-
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player"); // Assumes the player object has a "Player" tag
@@ -50,7 +50,7 @@ public class EnemyController : MonoBehaviour
 
     PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
     playerMovement.TakeDamage(damage, gameObject); // Pass the enemy game object as the second argument
-    playerMovement.Knockback(transform.position, 200f);
+    playerMovement.Knockback(transform.position, KBForce);
 
     yield return new WaitForSeconds(attackCooldown);
 
