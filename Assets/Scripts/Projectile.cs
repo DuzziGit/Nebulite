@@ -5,6 +5,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     public float speed = 10f;  // The speed of the projectile
+    public int damageAmount;  // Add this line
 
     public void Fire(Vector2 direction)
     {
@@ -22,23 +23,17 @@ void OnTriggerEnter2D(Collider2D other)
         MaterialController materialController = other.GetComponent<MaterialController>();
         if (materialController != null)
         {
-            if (PlayerMovement.Instance != null)
-            {
-                materialController.TakeDamage(PlayerMovement.Instance.damageAmount);
-            }
+            materialController.TakeDamage(damageAmount);
         }
-    
         EnemyController enemyController = other.GetComponent<EnemyController>();
         if (enemyController != null)
         {
-            if (PlayerMovement.Instance != null)
-            {
-                enemyController.TakeDamage(PlayerMovement.Instance.damageAmount);
-            }
+            enemyController.TakeDamage(damageAmount);
         }
-
         Destroy(gameObject);
     }
 }
 
+
 }
+

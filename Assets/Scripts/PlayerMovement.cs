@@ -277,6 +277,7 @@ private IEnumerator ApplyKnockback(Vector2 direction, float force)
     GameObject projectile = Instantiate(projectilePrefab, BarrelTransform.position, Quaternion.identity);
     Projectile projectileComponent = projectile.GetComponent<Projectile>();
     projectileComponent.Fire(direction);
+    projectileComponent.damageAmount = damageAmount;  // Add this line
 
     // Calculate the angle in degrees between the direction vector and the positive X axis
     float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
