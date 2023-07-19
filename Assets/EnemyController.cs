@@ -9,7 +9,7 @@ public class EnemyController : MonoBehaviour
     public GameObject player;
     private bool isShaking = false; // flag to indicate if the material is currently shaking
     public EnemySpawner EnemySpawner;
-    
+
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player"); // Assumes the player object has a "Player" tag
@@ -28,18 +28,21 @@ public class EnemyController : MonoBehaviour
         this.transform.position += direction * moveSpeed * Time.deltaTime;
     }
 
-    public void TakeDamage(float amount)
+  public void TakeDamage(float amount)
+{
+    Debug.Log("Taking damage: " + amount);
+    health -= amount;
+    if (health <= 0)
     {
-        health -= amount;
-        if (health <= 0)
-        {
-            Destroy(this.gameObject);
-        }
-         else if (!isShaking) // start shaking only if the material is not already shaking
-        {
-            StartCoroutine(ShakeMaterial());
-        }
+        Debug.Log("Enemy destroyed");
+        EnemySpawner.RemoveEnemy(this.gameObject);
+        Destroy(this.gameObject);
     }
+    else if (!isShaking)
+    {
+        StartCoroutine(ShakeMaterial());
+    }
+}
   private IEnumerator ShakeMaterial()
     {
         isShaking = true;

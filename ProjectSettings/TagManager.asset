@@ -8,6 +8,7 @@ TagManager:
   - Count1
   - Count2
   - Door
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -19,7 +20,7 @@ TagManager:
   - Material
   - Player
   - Bloom
-  - 
+  - Enemy
   - 
   - 
   - 

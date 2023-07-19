@@ -48,9 +48,17 @@ public class EnemySpawner : MonoBehaviour
             transform.position.y + radius * Mathf.Sin(angle * Mathf.Deg2Rad)
         );
 
-        GameObject enemy = Instantiate(prefab, position, Quaternion.identity);
-        enemies.Add(enemy);
+        
+    GameObject enemy = Instantiate(prefab, position, Quaternion.identity);
+    EnemyController enemyController = enemy.GetComponent<EnemyController>();
+    if (enemyController != null)
+    {
+        enemyController.EnemySpawner = this;
     }
+    enemies.Add(enemy);
+}
+        
+    
 
     public void RemoveEnemy(GameObject enemy)
     {

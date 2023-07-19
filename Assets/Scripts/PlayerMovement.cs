@@ -206,24 +206,31 @@ public class PlayerMovement : MonoBehaviour
         }
 
         if (isAttacking)
-        {
-            attackTimer += Time.deltaTime;
+    {
+        attackTimer += Time.deltaTime;
 
-            if (attackTimer >= attackInterval)
+        if (attackTimer >= attackInterval)
+        {
+            attackTimer = 0f;
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, aimDirection, raycastDistance, materialLayer);
+            if (hit.collider != null)
             {
-                attackTimer = 0f;
-                RaycastHit2D hit = Physics2D.Raycast(transform.position, aimDirection, raycastDistance, materialLayer);
-                if (hit.collider != null)
+                
+                MaterialController materialController = hit.collider.GetComponent<MaterialController>();
+                if (materialController != null)
                 {
-                    MaterialController materialController = hit.collider.GetComponent<MaterialController>();
-                    if (materialController != null)
-                    {
-                        materialController.TakeDamage(damageAmount);
-                    }
+                    materialController.TakeDamage(damageAmount);
+                }
+                EnemyController enemyController = hit.collider.GetComponent<EnemyController>();
+                if (enemyController != null)
+                {
+                    
+                    enemyController.TakeDamage(damageAmount);
                 }
             }
         }
     }
+}
 
     void UpdateMaterialCounts()
     {
