@@ -40,6 +40,7 @@ public class PlayerMovement : MonoBehaviour
     public TMP_Text levelSpeed;
     public TMP_Text levelRange;
     public TMP_Text depositText; 
+    public Transform BarrelTransform;
 
     // Upgrade Levels and Max Levels
     private int damageLevel = 1;
@@ -66,6 +67,7 @@ public class PlayerMovement : MonoBehaviour
     private int direction = 0;
     private bool isAttacking = false;
     private float attackTimer = 0f;
+    public GameObject projectilePrefab;  // Prefab of the projectile
 
     // Other
     public Rigidbody2D rb2d;
@@ -109,6 +111,7 @@ public float knockbackForce = 100f; // Adjust the value as needed
 
     }
 
+   
     void Update()
     {
         UpdateUpgradeCosts();
@@ -216,11 +219,16 @@ private IEnumerator ApplyKnockback(Vector2 direction, float force)
 
     void HandlePlayerAction()
     {
+
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 directionToMouse = (mousePosition - transform.position).normalized;
-        Vector2 aimDirection = directionToMouse;
-
-        if (Input.GetMouseButton(0))
+                Vector2 aimDirection = directionToMouse;
+    
+        if (Input.GetMouseButtonDown(0))  // Left mouse button
+        {
+            FireProjectile(directionToMouse);
+        }
+               if (Input.GetMouseButton(1))
         {
             isAttacking = true;
             lineRenderer.enabled = true;
@@ -264,6 +272,18 @@ private IEnumerator ApplyKnockback(Vector2 direction, float force)
     }
 }
 
+ void FireProjectile(Vector2 direction)
+    {
+    GameObject projectile = Instantiate(projectilePrefab, BarrelTransform.position, Quaternion.identity);
+    Projectile projectileComponent = projectile.GetComponent<Projectile>();
+    projectileComponent.Fire(direction);
+
+    // Calculate the angle in degrees between the direction vector and the positive X axis
+    float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+    // Rotate the projectile to face the firing direction
+    projectile.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+    }
     void UpdateMaterialCounts()
     {
         if (playerMaterials.ContainsKey("Asteroid"))
