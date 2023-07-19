@@ -58,6 +58,7 @@ public class PlayerMovement : MonoBehaviour
     public int damageAmount = 1;
     public float attackInterval = 0.5f;
     public float time = 10.0f; 
+    public float health = 100; 
     // Player State
     private Vector2 moveInput;
     private int coins = 0;
@@ -81,6 +82,7 @@ public class PlayerMovement : MonoBehaviour
     public static PlayerMovement Instance;
     public TMP_Text upgradeMessageText; // New UI text element for upgrade messages
     Vector2 startPos;
+public float knockbackForce = 100f; // Adjust the value as needed
 
 
    void Awake() 
@@ -181,6 +183,36 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool("IsWalking", false);
         }
     }
+public void TakeDamage(float amount, GameObject enemy)
+{
+    Debug.Log("Taking damage: " + amount);
+  health -= amount;
+
+        if (health <= 0)
+        {
+            //TODO: ADD Death functionality
+        }
+    }
+
+public void Knockback(Vector3 enemyPosition, float knockbackForce)
+{
+    Vector2 direction = transform.position - enemyPosition;
+    direction.Normalize();
+    // Try adding the knockback force over a few frames
+    StartCoroutine(ApplyKnockback(direction, knockbackForce));
+    Debug.Log("Player should get knocked back");
+}
+
+private IEnumerator ApplyKnockback(Vector2 direction, float force)
+{
+    float knockbackTime = 0.2f; // The time over which the knockback occurs
+    while (knockbackTime > 0f)
+    {
+        rb2d.AddForce(direction * (force / Time.deltaTime), ForceMode2D.Force); // Apply the force divided over each frame
+        knockbackTime -= Time.deltaTime;
+        yield return null;
+    }
+}
 
     void HandlePlayerAction()
     {
