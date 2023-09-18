@@ -62,7 +62,7 @@ public class PlayerMovement : MonoBehaviour
     public float health = 100; 
     // Player State
     private Vector2 moveInput;
-    private int coins = 0;
+    public int coins = 0;
     private int TotalCoins = 0;
     private int direction = 0;
     private bool isAttacking = false;
@@ -122,9 +122,9 @@ public float knockbackForce = 100f; // Adjust the value as needed
     }
    void UpdateUpgradeCosts()
     {
-        costDamageUpgrade.text = "Upgrade Cost: " + (100 * damageLevel).ToString();
-        costSpeedUpgrade.text = "Upgrade Cost: " + (100 * speedLevel).ToString();
-        costRangeUpgrade.text = "Upgrade Cost: " + (100 * rangeLevel).ToString();
+        costDamageUpgrade.text =  (50 * damageLevel).ToString();
+        costSpeedUpgrade.text =  (50 * speedLevel).ToString();
+        costRangeUpgrade.text =  (50 * rangeLevel).ToString();
     }
     void UpdatePlayerUI()
     {

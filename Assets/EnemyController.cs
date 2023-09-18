@@ -61,13 +61,17 @@ public class EnemyController : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
+            PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
+
         Debug.Log("Taking damage: " + amount);
         health -= amount;
         if (health <= 0)
         {
             Debug.Log("Enemy destroyed");
+            playerMovement.coins += 1;
             EnemySpawner.RemoveEnemy(this.gameObject);
             Destroy(this.gameObject);
+
         }
         else if (!isShaking)
         {
