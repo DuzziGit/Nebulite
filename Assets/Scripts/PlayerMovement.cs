@@ -307,7 +307,7 @@ void FireProjectile(Vector2 direction)
 
     float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
     projectile.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-    StartCoroutine(PlayerRecoil(direction * -1)); // Start the recoil effect on the player
+    //StartCoroutine(PlayerRecoil(direction * -1)); // Start the recoil effect on the player
 
 }
 Vector3 playerRecoilVelocity = Vector3.zero;
