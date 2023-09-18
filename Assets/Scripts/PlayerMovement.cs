@@ -464,8 +464,9 @@ Debug.Log("Cost: " + cost);
     }
   public void upgradeDamage()
     {
+
         if (damageLevel >= maxDamageLevel) return;
-        int cost = 100 * damageLevel; 
+        int cost = 50 * damageLevel; 
         float upgradeAmount = 2f / damageLevel; 
         if (TryUpgrade("damageAmount", cost, upgradeAmount))
         {
@@ -486,7 +487,7 @@ Debug.Log("Cost: " + cost);
   public void upgradeLaserLength()
     {
         if (rangeLevel >= maxRangeLevel) return;
-        int cost = 100 * rangeLevel; 
+        int cost = 50 * rangeLevel; 
         float upgradeAmount = 1f / rangeLevel;
         if (TryUpgrade("laserLength", cost, upgradeAmount))
         {
@@ -507,7 +508,7 @@ Debug.Log("Cost: " + cost);
     public void upgradeMoveSpeed()
     {
         if (speedLevel >= maxSpeedLevel) return;
-        int cost = 100 * speedLevel; 
+        int cost = 50 * speedLevel; 
         float upgradeAmount = 1f / speedLevel;
         if (TryUpgrade("moveSpeed", cost, upgradeAmount))
         {
@@ -645,6 +646,7 @@ public void Unfreeze()
             enemySpawner.StartSpawning();
         }
     }
+      time = 240;
 }
 
 

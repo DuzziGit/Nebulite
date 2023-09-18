@@ -36,25 +36,28 @@ public class TimerController : MonoBehaviour
         
 	}
 
-    void Update()
+   void Update()
+{
+    		max_time = playerTime;
+
+    if (!timerPaused)
     {
-        //  Debug.Log(playerTime);
-        if (!timerPaused)
+        // Reflect the playerMovement's time directly
+        time_remaining = playerMovement.time;
+
+        // Update the fill amount based on the current time_remaining
+        timer_foreground.fillAmount = time_remaining / max_time;
+
+        if (time_remaining <= 0)
         {
-            time_remaining = playerMovement.time;
-            if (time_remaining > 0)
-            {
-                time_remaining -= Time.deltaTime;
-                timer_foreground.fillAmount = time_remaining / max_time;
-
-            }
-
-            if (time_remaining <= 0)
-            {
-                // Debug.Log("Time Remaining: " + time_remaining);
-                playerMovement.TimeHasRunOut();
-            }
+            playerMovement.TimeHasRunOut();
         }
     }
+}
+public void SetMaxTime(float newMaxTime)
+{
+    max_time = newMaxTime;
+    time_remaining = max_time;
+}
 
 }

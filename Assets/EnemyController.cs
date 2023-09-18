@@ -51,7 +51,7 @@ public class EnemyController : MonoBehaviour
     PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
     playerMovement.TakeDamage(damage, gameObject); // Pass the enemy game object as the second argument
     playerMovement.Knockback(transform.position, KBForce);
-    playerMovement.time = playerMovement.time - 3;
+    playerMovement.time = playerMovement.time - 14;
     yield return new WaitForSeconds(attackCooldown);
 
     canAttack = true;
@@ -63,11 +63,11 @@ public class EnemyController : MonoBehaviour
     {
             PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
 
-        Debug.Log("Taking damage: " + amount);
+      //  Debug.Log("Taking damage: " + amount);
         health -= amount;
         if (health <= 0)
         {
-            Debug.Log("Enemy destroyed");
+          //  Debug.Log("Enemy destroyed");
             playerMovement.coins += 1;
             playerMovement.AddMaterial("Enemy");
     
