@@ -20,11 +20,11 @@ void OnTriggerEnter2D(Collider2D other)
     // Check if the object collided with is an enemy or other intended target
     if (other.gameObject.CompareTag("Enemy") || other.gameObject.CompareTag("Material"))
     {
-        MaterialController materialController = other.GetComponent<MaterialController>();
-        if (materialController != null)
-        {
-            materialController.TakeDamage(damageAmount);
-        }
+        // MaterialController materialController = other.GetComponent<MaterialController>();
+        // if (materialController != null)
+        // {
+        //     materialController.TakeDamage(damageAmount);
+        // }
         EnemyController enemyController = other.GetComponent<EnemyController>();
         if (enemyController != null)
         {

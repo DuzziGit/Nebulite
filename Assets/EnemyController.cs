@@ -51,7 +51,7 @@ public class EnemyController : MonoBehaviour
     PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
     playerMovement.TakeDamage(damage, gameObject); // Pass the enemy game object as the second argument
     playerMovement.Knockback(transform.position, KBForce);
-
+    playerMovement.time = playerMovement.time - 3;
     yield return new WaitForSeconds(attackCooldown);
 
     canAttack = true;

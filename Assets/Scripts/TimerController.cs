@@ -41,6 +41,7 @@ public class TimerController : MonoBehaviour
         //  Debug.Log(playerTime);
         if (!timerPaused)
         {
+            time_remaining = playerMovement.time;
             if (time_remaining > 0)
             {
                 time_remaining -= Time.deltaTime;
