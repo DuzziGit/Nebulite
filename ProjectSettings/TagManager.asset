@@ -9,6 +9,7 @@ TagManager:
   - Count2
   - Door
   - Enemy
+  - EnemySpawner
   layers:
   - Default
   - TransparentFX

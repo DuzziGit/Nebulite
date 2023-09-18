@@ -28,11 +28,15 @@ public class PlayerMovement : MonoBehaviour
     public TMP_Text mat3GuiCount;
     public TMP_Text mat4GuiCount;
     public TMP_Text mat5GuiCount;
+    public TMP_Text EnemyGuiCount;
     public TMP_Text mat1EndCount;
     public TMP_Text mat2EndCount;
     public TMP_Text mat3EndCount;
     public TMP_Text mat4EndCount;
     public TMP_Text mat5EndCount;
+    public TMP_Text EnemyEndCount;
+
+
     public TMP_Text coinText;
     public TMP_Text coinEndCount;
     public TMP_Text coinUpgradeCount;
@@ -63,7 +67,7 @@ public class PlayerMovement : MonoBehaviour
     // Player State
     private Vector2 moveInput;
     public int coins = 0;
-    private int TotalCoins = 0;
+    public int TotalCoins = 0;
     private int direction = 0;
     private bool isAttacking = false;
     private float attackTimer = 0f;
@@ -82,9 +86,11 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 lastPosition;
     public Dictionary<string, int> playerMaterials = new Dictionary<string, int>();
     public static PlayerMovement Instance;
-    public TMP_Text upgradeMessageText; // New UI text element for upgrade messages
+    public TMP_Text upgradeMessageText; 
     Vector2 startPos;
-public float knockbackForce = 100f; // Adjust the value as needed
+public float knockbackForce = 100f; 
+public float sprintMultiplier = 1.5f; 
+
 
 
    void Awake() 
@@ -139,6 +145,11 @@ public float knockbackForce = 100f; // Adjust the value as needed
         moveInput.x = Input.GetAxisRaw("Horizontal");
         moveInput.y = Input.GetAxisRaw("Vertical");
         moveInput.Normalize();
+    if (Input.GetKey(KeyCode.LeftShift))
+    {
+        moveInput *= sprintMultiplier; 
+    }
+
         rb2d.velocity = moveInput * moveSpeed;
 
         if (moveInput != Vector2.zero)
@@ -312,6 +323,11 @@ private IEnumerator ApplyKnockback(Vector2 direction, float force)
             mat5GuiCount.text = playerMaterials["Petal"].ToString();
             mat5EndCount.text = playerMaterials["Petal"].ToString();
         }
+         if (playerMaterials.ContainsKey("Enemy"))
+        {
+            EnemyEndCount.text = playerMaterials["Enemy"].ToString();
+            EnemyGuiCount.text = playerMaterials["Enemy"].ToString();
+        }
     }
     void handleAnimation()
     {
@@ -409,7 +425,8 @@ private IEnumerator ApplyKnockback(Vector2 direction, float force)
         {
             // Subtract cost
             TotalCoins -= cost;
-
+Debug.Log("Total Coins: " + TotalCoins);
+Debug.Log("Cost: " + cost);
             // Upgrade the desired property
             switch (property)
             {
@@ -432,7 +449,8 @@ private IEnumerator ApplyKnockback(Vector2 direction, float force)
                  // Show success message
             upgradeMessageText.text = "Upgrade succeeded!";
             upgradeMessageText.color = Color.green;
-
+            Debug.Log("Total Coins: " + TotalCoins);
+Debug.Log("Cost: " + cost);
             return true;
         }
         else
@@ -577,16 +595,58 @@ private IEnumerator ApplyKnockback(Vector2 direction, float force)
 	}
 
 	public void Freeze()
-	{
-		rb2d.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
-
-	}
-
-	public void Unfreeze()
+{
+    rb2d.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+    
+    GameObject enemySpawnerGameObject = GameObject.FindGameObjectWithTag("EnemySpawner"); 
+    if (enemySpawnerGameObject != null)
     {
-        rb2d.constraints &= RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezePositionY;
-        rb2d.constraints = RigidbodyConstraints2D.FreezeRotation;
-	}
+        EnemySpawner enemySpawner = enemySpawnerGameObject.GetComponent<EnemySpawner>();
+        if (enemySpawner != null)
+        {
+            enemySpawner.CancelInvoke(nameof(enemySpawner.SpawnEnemy)); // Stop the periodic spawning
+            enemySpawner.enabled = false; // Disable the EnemySpawner script to prevent any other interactions
+        }
+        else
+        {
+            Debug.LogError("EnemySpawner component missing on tagged object");
+        }
+    }
+    else
+    {
+        Debug.LogError("No object with tag EnemySpawner found");
+    }
+    
+    GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+    if (enemies.Length == 0)
+    {
+        Debug.LogWarning("No enemies found");
+    }
+    
+    foreach(GameObject enemy in enemies)
+    {
+        Debug.Log("Destroying enemy: " + enemy.name);
+        Destroy(enemy);
+    }
+}
+
+public void Unfreeze()
+{
+    rb2d.constraints &= RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezePositionY;
+    rb2d.constraints = RigidbodyConstraints2D.FreezeRotation;
+
+    GameObject enemySpawnerGameObject = GameObject.FindGameObjectWithTag("EnemySpawner");
+    if (enemySpawnerGameObject != null)
+    {
+        EnemySpawner enemySpawner = enemySpawnerGameObject.GetComponent<EnemySpawner>();
+        if (enemySpawner != null)
+        {
+            enemySpawner.enabled = true;
+            enemySpawner.StartSpawning();
+        }
+    }
+}
+
 
     public void Reposition()
     {

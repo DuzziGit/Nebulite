@@ -69,7 +69,9 @@ public class EnemyController : MonoBehaviour
         {
             Debug.Log("Enemy destroyed");
             playerMovement.coins += 1;
-            EnemySpawner.RemoveEnemy(this.gameObject);
+            playerMovement.AddMaterial("Enemy");
+    
+                EnemySpawner.RemoveEnemy(this.gameObject);
             Destroy(this.gameObject);
 
         }

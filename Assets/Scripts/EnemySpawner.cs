@@ -27,8 +27,16 @@ public class EnemySpawner : MonoBehaviour
         // Start spawning enemies periodically
         InvokeRepeating(nameof(SpawnEnemy), 0f, 1f/spawnRate);
     }
+    public void StartSpawning()
+{
+    // Cancel any existing spawn invokes
+    CancelInvoke(nameof(SpawnEnemy));
 
-    private void SpawnEnemy()
+    // Start spawning again
+    InvokeRepeating(nameof(SpawnEnemy), 0f, 1f/spawnRate);
+}
+
+    public void SpawnEnemy()
     {
         if (enemies.Count >= maxEnemies)
         {
