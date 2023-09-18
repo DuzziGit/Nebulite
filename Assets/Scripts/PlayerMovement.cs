@@ -72,6 +72,8 @@ public class PlayerMovement : MonoBehaviour
     private bool isAttacking = false;
     private float attackTimer = 0f;
     public GameObject projectilePrefab;  // Prefab of the projectile
+public float recoilStrength = 0.5f; // adjust as needed
+public Transform gunTransform;
 
     // Other
     public Rigidbody2D rb2d;
@@ -90,6 +92,8 @@ public class PlayerMovement : MonoBehaviour
     Vector2 startPos;
 public float knockbackForce = 100f; 
 public float sprintMultiplier = 1.5f; 
+private Coroutine recoilCoroutine;
+private bool isRecoiling = false;
 
 
 
@@ -122,7 +126,10 @@ public float sprintMultiplier = 1.5f;
     {
         UpdateUpgradeCosts();
         UpdatePlayerUI();
+          if(!isRecoiling) 
+    {
         HandlePlayerMovement();
+    }
         HandlePlayerAction();
         UpdateMaterialCounts();
     }
@@ -228,28 +235,36 @@ private IEnumerator ApplyKnockback(Vector2 direction, float force)
     }
 }
 
-    void HandlePlayerAction()
+ void HandlePlayerAction()
+{
+    Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    Vector2 directionToMouse = (mousePosition - transform.position).normalized;
+    Vector2 aimDirection = directionToMouse;
+
+    AudioSource audioSource = GetComponent<AudioSource>(); // Get the AudioSource component
+
+    if (Input.GetMouseButtonDown(0))  // Left mouse button
     {
+        FireProjectile(directionToMouse);
 
-        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 directionToMouse = (mousePosition - transform.position).normalized;
-                Vector2 aimDirection = directionToMouse;
-    
-        if (Input.GetMouseButtonDown(0))  // Left mouse button
+        // Play the gunshot sound using PlayOneShot
+        if (audioSource && audioSource.clip)
         {
-            FireProjectile(directionToMouse);
+            audioSource.PlayOneShot(audioSource.clip);
         }
-               if (Input.GetMouseButton(1))
-        {
-            isAttacking = true;
-            lineRenderer.enabled = true;
+    }
 
-            Vector3 laserStart = laserStartPoint != null ? laserStartPoint.transform.position : transform.position;
-            Vector3 laserEnd = laserStart + (new Vector3(aimDirection.x, aimDirection.y, 0) * laserLength);
+    if (Input.GetMouseButton(1))
+    {
+        isAttacking = true;
+        lineRenderer.enabled = true;
 
-            lineRenderer.SetPosition(0, laserStart);
-            lineRenderer.SetPosition(1, laserEnd);
-        }
+        Vector3 laserStart = laserStartPoint != null ? laserStartPoint.transform.position : transform.position;
+        Vector3 laserEnd = laserStart + (new Vector3(aimDirection.x, aimDirection.y, 0) * laserLength);
+
+        lineRenderer.SetPosition(0, laserStart);
+        lineRenderer.SetPosition(1, laserEnd);
+    }
         else
         {
             isAttacking = false;
@@ -272,30 +287,44 @@ private IEnumerator ApplyKnockback(Vector2 direction, float force)
                 {
                     materialController.TakeDamage(damageAmount);
                 }
-                EnemyController enemyController = hit.collider.GetComponent<EnemyController>();
-                if (enemyController != null)
-                {
+                // EnemyController enemyController = hit.collider.GetComponent<EnemyController>();
+                // if (enemyController != null)
+                // {
                     
-                    enemyController.TakeDamage(damageAmount);
-                }
+                //     enemyController.TakeDamage(damageAmount);
+                // }
             }
         }
     }
 }
 
- void FireProjectile(Vector2 direction)
-    {
+void FireProjectile(Vector2 direction)
+{
     GameObject projectile = Instantiate(projectilePrefab, BarrelTransform.position, Quaternion.identity);
     Projectile projectileComponent = projectile.GetComponent<Projectile>();
     projectileComponent.Fire(direction);
     projectileComponent.damageAmount = damageAmount;  // Add this line
 
-    // Calculate the angle in degrees between the direction vector and the positive X axis
     float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-
-    // Rotate the projectile to face the firing direction
     projectile.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-    }
+    StartCoroutine(PlayerRecoil(direction * -1)); // Start the recoil effect on the player
+
+}
+Vector3 playerRecoilVelocity = Vector3.zero;
+Vector3 playerReturnVelocity = Vector3.zero;
+
+IEnumerator PlayerRecoil(Vector2 recoilDirection)
+{
+    isRecoiling = true;
+
+    // Apply the recoil as a force
+    rb2d.AddForce(recoilStrength * recoilDirection, ForceMode2D.Impulse);
+
+    // Allow some time for the recoil to take effect
+    yield return new WaitForSeconds(0.1f);
+
+    isRecoiling = false;
+}
     void UpdateMaterialCounts()
     {
         if (playerMaterials.ContainsKey("Asteroid"))
