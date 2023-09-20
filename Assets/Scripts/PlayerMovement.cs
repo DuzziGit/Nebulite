@@ -664,7 +664,6 @@ public void Unfreeze()
 {
     rb2d.constraints &= RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezePositionY;
     rb2d.constraints = RigidbodyConstraints2D.FreezeRotation;
-
     GameObject enemySpawnerGameObject = GameObject.FindGameObjectWithTag("EnemySpawner");
     if (enemySpawnerGameObject != null)
     {
@@ -705,6 +704,9 @@ public void Unfreeze()
         mat5GuiCount.text = "0";
 		mat5EndCount.text = "0";
 
+        EnemyEndCount.text = "0";
+        EnemyGuiCount.text = "0";
+
 	}
 
 	public void WipeMaterialsInGame()
@@ -721,6 +723,8 @@ public void Unfreeze()
 		mat4GuiCount.text = "0";
         
         mat5GuiCount.text = "0";
+
+        EnemyGuiCount.text = "0";
 
 
 	}

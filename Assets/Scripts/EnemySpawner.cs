@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class EnemySpawner : MonoBehaviour
     public Vector2 maxSpawnPosition = new Vector2(35, 40);
     public float spawnRadius = 50f;
     public float noSpawnRadius = 2f;
+    public static EnemySpawner instance;
 
     private List<GameObject> enemies = new List<GameObject>();
 
@@ -22,10 +24,22 @@ public class EnemySpawner : MonoBehaviour
         Gizmos.DrawWireSphere(new Vector3(transform.position.x, transform.position.y, 0), noSpawnRadius);
     }
 
-    private void Start()
+    private void Awake()
     {
-        // Start spawning enemies periodically
-        InvokeRepeating(nameof(SpawnEnemy), 0f, 1f/spawnRate);
+        
+            if (instance != null && instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+
+            // Start spawning enemies periodically
+            StartSpawning();
+        
+
     }
     public void StartSpawning()
 {
@@ -75,5 +89,22 @@ public class EnemySpawner : MonoBehaviour
         {
             InvokeRepeating(nameof(SpawnEnemy), 0f, 1f/spawnRate);
         }
+    }
+    private void OnEnable()
+    {
+        SceneManager.sceneUnloaded += OnSceneUnloaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneUnloaded -= OnSceneUnloaded;
+    }
+    public void ClearEnemies()
+    {
+        enemies.Clear();
+    }
+    private void OnSceneUnloaded(Scene currentScene)
+    {
+        ClearEnemies();
     }
 }
