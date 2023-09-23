@@ -16,6 +16,8 @@ public class EnemyController : MonoBehaviour
     public EnemySpawner EnemySpawner;
     private Vector3 originalPosition;
         public AudioClip deathSound; // sound to play when the enemy dies
+            public AudioClip attackSound; // sound to play when the enemy attacks
+
 
     private void Start()
     {
@@ -49,6 +51,7 @@ public class EnemyController : MonoBehaviour
 {
     canAttack = false;
     isMoving = false;
+        PlayAttackSound(); // play attack sound
 
     PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
     playerMovement.TakeDamage(damage, gameObject); // Pass the enemy game object as the second argument
@@ -113,5 +116,20 @@ public class EnemyController : MonoBehaviour
             // Destroy the soundObject after the sound has finished playing
             Destroy(soundObject, deathSound.length);
         }
+
+
     }
+        private void PlayAttackSound()
+    {
+        if (attackSound != null)
+        {
+            // Create a new GameObject to play the attack sound
+            GameObject soundObject = new GameObject("AttackSound");
+            AudioSource audioSource = soundObject.AddComponent<AudioSource>();
+            audioSource.PlayOneShot(attackSound);
+
+            // Destroy the soundObject after the sound has finished playing
+            Destroy(soundObject, attackSound.length);
+        }
+    } 
 }
