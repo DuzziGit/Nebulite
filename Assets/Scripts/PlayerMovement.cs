@@ -46,6 +46,13 @@ public class PlayerMovement : MonoBehaviour
     public TMP_Text depositText; 
     public Transform BarrelTransform;
 
+    //SFX
+
+    public AudioClip[] footstepSounds; // Array to hold the footstep sound clips
+    private AudioSource audioSource; // AudioSource component to play the footstep sounds
+    public AudioClip timeRunOutSound; // sound to play when the time has run out
+
+
     // Upgrade Levels and Max Levels
     private int damageLevel = 1;
     private int speedLevel = 1;
@@ -95,6 +102,11 @@ public float sprintMultiplier = 1.5f;
 private Coroutine recoilCoroutine;
 private bool isRecoiling = false;
 
+    public float stepsPerUnit = .5f; // Number of steps per unit of speed
+
+    private float stepTimer = 0f; 
+public float stepsPerSecond = 2f; // Number of steps per second, adjust as needed
+
 
 
    void Awake() 
@@ -118,6 +130,7 @@ private bool isRecoiling = false;
         rb2d.constraints = RigidbodyConstraints2D.FreezeRotation;
         startPos = transform.position;
         UpdateUpgradeCosts();
+        audioSource = gameObject.AddComponent<AudioSource>(); // Add an AudioSource component to the player object
 
     }
 
@@ -132,7 +145,29 @@ private bool isRecoiling = false;
     }
         HandlePlayerAction();
         UpdateMaterialCounts();
+       
+       float currentSpeed = rb2d.velocity.magnitude; // Use the actual current speed of the Rigidbody2D
+if (currentSpeed > 0.1f) // Check if the player is moving
+{
+    float stepInterval = 1f / (moveSpeed * stepsPerSecond); // Use moveSpeed and stepsPerSecond to calculate stepInterval
+    Debug.Log("Step Interval: " + stepInterval); // Log the stepInterval
+    stepTimer += Time.deltaTime;
+    Debug.Log("Step Timer: " + stepTimer); // Log the stepTimer
+    if (stepTimer >= stepInterval)
+    {
+        stepTimer = 0f;
+        PlayFootstepSound();
     }
+}
+else
+{
+    stepTimer = 0f; // Reset the timer when the player is not moving
+}
+
+
+    
+    }
+    
    void UpdateUpgradeCosts()
     {
         costDamageUpgrade.text =  (50 * damageLevel).ToString();
@@ -214,7 +249,15 @@ public void TakeDamage(float amount, GameObject enemy)
             //TODO: ADD Death functionality
         }
     }
-
+void PlayFootstepSound()
+{
+    if (footstepSounds.Length > 0 && audioSource != null)
+    {
+        int index = Random.Range(0, footstepSounds.Length); // Choose a random footstep sound
+        audioSource.PlayOneShot(footstepSounds[index]); // Play the chosen footstep sound
+        Debug.Log("Footstep sound played at: " + Time.time); // Log the time when the footstep sound is played
+    }
+}
 public void Knockback(Vector3 enemyPosition, float knockbackForce)
 {
     Vector2 direction = transform.position - enemyPosition;
@@ -558,12 +601,26 @@ Debug.Log("Cost: " + cost);
 	public void TimeHasRunOut()
 	{
 		Freeze();
+        PlayTimeRunOutSound(); // play time run out sound
 
 		uiController.PlayerLoss();
+
 		
 	}
 
+   private void PlayTimeRunOutSound()
+    {
+        if (timeRunOutSound != null)
+        {
+            // Create a new GameObject to play the time run out sound
+            GameObject soundObject = new GameObject("TimeRunOutSound");
+            AudioSource audioSource = soundObject.AddComponent<AudioSource>();
+            audioSource.PlayOneShot(timeRunOutSound);
 
+            // Destroy the soundObject after the sound has finished playing
+            Destroy(soundObject, timeRunOutSound.length);
+        }
+    }
 
     void OnTriggerStay2D(Collider2D other)
     {
