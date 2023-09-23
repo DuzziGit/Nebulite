@@ -15,6 +15,8 @@ public class EnemyController : MonoBehaviour
     private bool isMoving = true; // flag to indicate if the enemy is moving
     public EnemySpawner EnemySpawner;
     private Vector3 originalPosition;
+        public AudioClip deathSound; // sound to play when the enemy dies
+
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player"); // Assumes the player object has a "Player" tag
@@ -72,6 +74,8 @@ public class EnemyController : MonoBehaviour
             playerMovement.AddMaterial("Enemy");
             EnemySpawner.RemoveEnemy(this.gameObject);
             Destroy(this.gameObject);
+                        PlayDeathSound(); // play death sound
+
 
         }
         else if (!isShaking)
@@ -96,5 +100,18 @@ public class EnemyController : MonoBehaviour
 
         transform.position = originalPosition;
         isShaking = false;
+    }
+      private void PlayDeathSound()
+    {
+        if (deathSound != null)
+        {
+            // Create a new GameObject to play the death sound
+            GameObject soundObject = new GameObject("DeathSound");
+            AudioSource audioSource = soundObject.AddComponent<AudioSource>();
+            audioSource.PlayOneShot(deathSound);
+
+            // Destroy the soundObject after the sound has finished playing
+            Destroy(soundObject, deathSound.length);
+        }
     }
 }

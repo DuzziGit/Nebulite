@@ -107,6 +107,7 @@ MonoBehaviour:
   KBForce: 100
   player: {fileID: 0}
   EnemySpawner: {fileID: 0}
+  deathSound: {fileID: 8300000, guid: 24108bf3a1a082741bb2fe6e420bd84f, type: 3}
 --- !u!61 &1342743219
 BoxCollider2D:
   m_ObjectHideFlags: 0

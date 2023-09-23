@@ -130,3 +130,5 @@ MonoBehaviour:
   materialDropMax: 10
   spreadRadius: 1.5
   materialDropPrefab: {fileID: 1302859029234881101, guid: 153f8f7f882b5064fb725dfed2a84648, type: 3}
+  breakSound: {fileID: 8300000, guid: 1b4c2dddb14197c4d9958b22ed8b0098, type: 3}
+  damageSound: {fileID: 8300000, guid: 85eaf86e388903443b5792026b612adb, type: 3}
