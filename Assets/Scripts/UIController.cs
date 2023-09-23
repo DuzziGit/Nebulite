@@ -55,6 +55,19 @@ timerController.max_time = playerMovement.time;
 				StartCoroutine(FadeBlackOutSquare(false));
 
 	}
+	public void ContinueLoss(){
+		    upgradeUI.SetActive(false);
+timerController.max_time = playerMovement.time;
+		timerController.time_remaining = timerController.max_time;
+		timerController.timerPaused = false;
+		playerMovement.Unfreeze();
+		SceneManager.LoadScene("Level");
+			materialBar.SetActive(true);
+		linearHolder.SetActive(true);
+		//coinText.SetActive(true);
+				StartCoroutine(FadeBlackOutSquare(false));
+
+	}
 	public void PlayerLoss()
 	{
 		timerController.timerPaused = true;

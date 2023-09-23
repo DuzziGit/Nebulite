@@ -649,6 +649,8 @@ MonoBehaviour:
   materialDropMax: 10
   spreadRadius: 1.5
   materialDropPrefab: {fileID: 1302859029234881101, guid: 9099adb13910bfb4ba4350c8ce8e5951, type: 3}
+  breakSound: {fileID: 8300000, guid: 6ef10d4bb9e4b924186f407f6fd96368, type: 3}
+  damageSound: {fileID: 8300000, guid: 01fcff5c02c21b04cb61f090ab0242f4, type: 3}
 --- !u!61 &-5255087983048982949
 BoxCollider2D:
   m_ObjectHideFlags: 0

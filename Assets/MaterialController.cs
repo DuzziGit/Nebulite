@@ -1,39 +1,71 @@
 using UnityEngine;
 using System.Collections;
 
+
 public class MaterialController : MonoBehaviour
 {
-    public int health = 10; // initial health
+    public int health = 10;
     public string materialKind;
-    public int materialDropMin = 1; // minimum number of materials that can be dropped
-    public int materialDropMax = 5; // maximum number of materials that can be dropped
-    public float spreadRadius = 1.5f; // radius within which the materials will spread out
-    public GameObject materialDropPrefab; // prefab for the dropped materials
+    public int materialDropMin = 1;
+    public int materialDropMax = 5;
+    public float spreadRadius = 1.5f;
+    public GameObject materialDropPrefab;
+    public AudioClip breakSound; // sound to play when the material breaks
+    public AudioClip damageSound; // sound to play when the material takes damage
 
-    private bool isShaking = false; // flag to indicate if the material is currently shaking
+    private bool isShaking = false;
+    private AudioSource audioSource; // audio source to play the sound
 
-    public void TakeDamage(int amount)
+    void Start()
     {
-        health -= amount;
+        audioSource = gameObject.AddComponent<AudioSource>(); // add an AudioSource component to the game object
+    }
 
-        if (health <= 0)
+  public void TakeDamage(int amount)
+{
+    health -= amount;
+
+    if (health <= 0)
+    {
+        // Create a new GameObject to play the break sound
+        GameObject soundObject = new GameObject("BreakSound");
+        AudioSource audioSource = soundObject.AddComponent<AudioSource>();
+        audioSource.PlayOneShot(breakSound);
+
+        // Destroy the soundObject after the sound has finished playing
+        Destroy(soundObject, breakSound.length);
+
+        int amountToDrop = Random.Range(materialDropMin, materialDropMax + 1);
+        Debug.Log("Dropped " + amountToDrop + " of " + materialKind);
+
+        for (int i = 0; i < amountToDrop; i++)
         {
-            int amountToDrop = Random.Range(materialDropMin, materialDropMax + 1);
-            Debug.Log("Dropped " + amountToDrop + " of " + materialKind);
-
-            // spread out the dropped materials
-            for (int i = 0; i < amountToDrop; i++)
-            {
-                Vector2 randomOffset = Random.insideUnitCircle * spreadRadius;
-                Vector3 spawnPosition = transform.position + new Vector3(randomOffset.x, 0f, randomOffset.y);
-                Instantiate(materialDropPrefab, spawnPosition, Quaternion.identity);
-            }
-
-            Destroy(gameObject); // destroy the material
+            Vector2 randomOffset = Random.insideUnitCircle * spreadRadius;
+            Vector3 spawnPosition = transform.position + new Vector3(randomOffset.x, 0f, randomOffset.y);
+            Instantiate(materialDropPrefab, spawnPosition, Quaternion.identity);
         }
-        else if (!isShaking) // start shaking only if the material is not already shaking
+
+        // Destroy the original object immediately
+        Destroy(gameObject);
+    }
+    else
+    {
+        PlaySound(damageSound); // play damage sound
+
+        if (!isShaking)
         {
             StartCoroutine(ShakeMaterial());
+        }
+    }
+}
+
+
+
+    private void PlaySound(AudioClip clip)
+    {
+        if (clip != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(clip); // play the assigned sound clip
         }
     }
 
@@ -58,7 +90,6 @@ public class MaterialController : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        // Draw a wire sphere representing the spread radius in the scene view
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, spreadRadius);
     }
