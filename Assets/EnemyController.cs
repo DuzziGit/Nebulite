@@ -104,21 +104,24 @@ public class EnemyController : MonoBehaviour
         transform.position = originalPosition;
         isShaking = false;
     }
-      private void PlayDeathSound()
+     private void PlayDeathSound()
+{
+    if (deathSound != null)
     {
-        if (deathSound != null)
-        {
-            // Create a new GameObject to play the death sound
-            GameObject soundObject = new GameObject("DeathSound");
-            AudioSource audioSource = soundObject.AddComponent<AudioSource>();
-            audioSource.PlayOneShot(deathSound);
+        // Create a new GameObject to play the death sound
+        GameObject soundObject = new GameObject("DeathSound");
+        AudioSource audioSource = soundObject.AddComponent<AudioSource>();
+        
+        // Set the volume to a lower level, for example, 0.5 for half volume
+        audioSource.volume = 0.5f;
+        
+        audioSource.PlayOneShot(deathSound);
 
-            // Destroy the soundObject after the sound has finished playing
-            Destroy(soundObject, deathSound.length);
-        }
-
-
+        // Destroy the soundObject after the sound has finished playing
+        Destroy(soundObject, deathSound.length);
     }
+}
+
         private void PlayAttackSound()
     {
         if (attackSound != null)

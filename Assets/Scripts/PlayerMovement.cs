@@ -101,6 +101,7 @@ public float knockbackForce = 100f;
 public float sprintMultiplier = 1.5f; 
 private Coroutine recoilCoroutine;
 private bool isRecoiling = false;
+private bool isBlackScreen = false;
 
     public float stepsPerUnit = .5f; // Number of steps per unit of speed
 
@@ -286,7 +287,7 @@ private IEnumerator ApplyKnockback(Vector2 direction, float force)
 
     AudioSource audioSource = GetComponent<AudioSource>(); // Get the AudioSource component
 
-    if (Input.GetMouseButtonDown(0))  // Left mouse button
+    if (Input.GetMouseButtonDown(0) && !isBlackScreen)  // Left mouse button
     {
         FireProjectile(directionToMouse);
 
@@ -683,6 +684,7 @@ Debug.Log("Cost: " + cost);
 
 	public void Freeze()
 {
+    isBlackScreen = true;
     rb2d.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
     
     GameObject enemySpawnerGameObject = GameObject.FindGameObjectWithTag("EnemySpawner"); 
@@ -719,6 +721,7 @@ Debug.Log("Cost: " + cost);
 
 public void Unfreeze()
 {
+    isBlackScreen = false;
     rb2d.constraints &= RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezePositionY;
     rb2d.constraints = RigidbodyConstraints2D.FreezeRotation;
     GameObject enemySpawnerGameObject = GameObject.FindGameObjectWithTag("EnemySpawner");
