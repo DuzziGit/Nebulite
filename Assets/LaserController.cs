@@ -4,66 +4,89 @@ using UnityEngine;
 
 public class LaserController : MonoBehaviour
 {
+    public float radius;                      // Max distance the laser can reach
+    public float speed;                       // Not currently used
+    public GameObject player;                 // Reference to the player object
+    public SpriteRenderer spriteRenderer;     // Optional sprite renderer for visuals
 
-
-
-
-    public float radius;
-    public float speed;
-    public GameObject player;
-    public SpriteRenderer spriteRenderer;
+    public float yOffset = 0.5f;              // Vertical offset from player's origin (e.g., chest or head)
+    public float zOffsetInFront = -0.1f;      // Z offset to make the laser appear in front of the player
+    public float zOffsetBehind = 0.1f;        // Z offset to make the laser appear behind the player
 
     private Vector3 mousePosition;
-    private float angle;
-    private int direction;
 
     void Update()
     {
         RotateLaser();
+        HandleLaserPosition();
     }
 
     void RotateLaser()
     {
+        // Get mouse position in world space
         mousePosition = Input.mousePosition;
         mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
+        mousePosition.z = 0f;
+
+        // Offset origin point upward from the player's center
+        Vector3 playerAnchor = player.transform.position + new Vector3(0f, yOffset, 0f);
+
+        // Calculate direction from anchor to mouse
         Vector2 direction = new Vector2(
-            mousePosition.x - player.transform.position.x,
-            mousePosition.y - player.transform.position.y
+            mousePosition.x - playerAnchor.x,
+            mousePosition.y - playerAnchor.y
         );
 
-        // Check if the direction vector's magnitude is greater than the deadzone value
-        float distanceToPlayer = Vector2.Distance(player.transform.position, mousePosition);
-        float deadzone = 0.1f; // Adjust this to suit your needs
+        float distanceToMouse = direction.magnitude;
+        float deadzone = 0.1f; // Prevents flickering when mouse is too close
 
-        if (distanceToPlayer > deadzone)
+        if (distanceToMouse > deadzone)
         {
-            // Normalize the direction vector so its length is 1
+            // Normalize direction vector
             direction = direction.normalized;
 
-            // Calculate the new position of the laser, which is in the direction of the mouse but capped at the radius
-            Vector3 laserPosition = player.transform.position + (Vector3)direction * Mathf.Min(distanceToPlayer, radius);
+            // Calculate laser position (anchored from elevated point)
+            Vector3 laserPosition = playerAnchor + (Vector3)direction * Mathf.Min(distanceToMouse, radius);
 
-            // Rotate and position the laser
+            // Rotate laser to face the direction
             transform.up = direction;
+
+            // Apply final laser position
             transform.position = laserPosition;
-
-            // Calculate the angle and sprite based on the direction
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            if (angle < 0) angle += 360;
-
-          
         }
     }
 
+    // Handle laser position based on "W" key input
+    void HandleLaserPosition()
+    {
+        Vector3 pos = transform.position;
+
+        if (Input.GetKey(KeyCode.W))  // "W" key pressed, move laser in front of player
+        {
+            pos.z = player.transform.position.z + zOffsetBehind;  // Move laser in front
+        }
+        else  // "W" key not pressed, move laser behind the player
+        {
+            pos.z = player.transform.position.z + zOffsetInFront;  // Move laser behind
+        }
+
+        // Update laser position
+        transform.position = pos;
+    }
 
     void OnDrawGizmos()
     {
-        // Draws a blue line from this transform to the player
-        Gizmos.color = Color.blue;
-        Gizmos.DrawLine(transform.position, player.transform.position);
+        if (player != null)
+        {
+            Vector3 playerAnchor = player.transform.position + new Vector3(0f, yOffset, 0f);
 
-        // Draws a blue circle at this transform's position
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(player.transform.position, radius);
+            // Line from laser to player anchor point
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(transform.position, playerAnchor);
+
+            // Circle around the anchor point for visual radius
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(playerAnchor, radius);
+        }
     }
 }
