@@ -25,17 +25,20 @@ public class TimerController : MonoBehaviour
 
 	void Start()
     {
-		playerTime = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().time;
-
-	
-
-		max_time = playerTime;
-
-		time_remaining = max_time;
-
-        
+        updateTime();   
 	}
 
+
+    public void updateTime(){
+        playerTime = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().time;
+
+
+
+        max_time = playerTime;
+
+        time_remaining = max_time;
+
+    }
     void Update()
     {
         //  Debug.Log(playerTime);

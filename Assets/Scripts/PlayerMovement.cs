@@ -39,25 +39,28 @@ public class PlayerMovement : MonoBehaviour
     public TMP_Text levelDamage;
     public TMP_Text levelSpeed;
     public TMP_Text levelRange;
+    public TMP_Text levelTime;
     public TMP_Text depositText; 
 
     // Upgrade Levels and Max Levels
     private int damageLevel = 1;
     private int speedLevel = 1;
     private int rangeLevel = 1;
+    private int timeLevel = 1;
     private int maxDamageLevel = 10;
     private int maxSpeedLevel = 10;
     private int maxRangeLevel = 10;
+    private int maxTimeLevel = 4;
     public TMP_Text costDamageUpgrade;
     public TMP_Text costSpeedUpgrade;
     public TMP_Text costRangeUpgrade;
-
+    public TMP_Text costTimeUpgrade;
     // Player Properties
     public float laserLength = 5f;
     public float moveSpeed;
     public int damageAmount = 1;
     public float attackInterval = 0.5f;
-    public float time = 10.0f; 
+    public float time = 45.0f; 
     // Player State
     private Vector2 moveInput;
     private int coins = 0;
@@ -120,6 +123,8 @@ public class PlayerMovement : MonoBehaviour
         costDamageUpgrade.text = "Upgrade Cost: " + (100 * damageLevel).ToString();
         costSpeedUpgrade.text = "Upgrade Cost: " + (100 * speedLevel).ToString();
         costRangeUpgrade.text = "Upgrade Cost: " + (100 * rangeLevel).ToString();
+        costTimeUpgrade.text = "Upgrade Cost: " + (100 * timeLevel).ToString();
+
     }
     void UpdatePlayerUI()
     {
@@ -364,6 +369,8 @@ public class PlayerMovement : MonoBehaviour
                 case "moveSpeed":
                     moveSpeed += upgradeAmount;
                     break;
+                    case "time":
+                    time += 30; break;
                 default:
             //        Debug.LogWarning("Unknown property: " + property);
                     return false;
@@ -400,7 +407,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            upgradeMessageText.text = "Upgrade failed! Not enough coins.";
+            upgradeMessageText.text = "Upgrade failed on Damage! Not enough coins.";
             upgradeMessageText.color = Color.red;
         }
     }
@@ -421,7 +428,29 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            upgradeMessageText.text = "Upgrade failed! Not enough coins.";
+            upgradeMessageText.text = "Upgrade failed on Laser! Not enough coins.";
+            upgradeMessageText.color = Color.red;
+        }
+    }
+
+    public void upgradeTimeLength()
+    {
+        if (timeLevel >= maxTimeLevel) return;
+        int cost = 100 * timeLevel;
+        float upgradeAmount = 1f / timeLevel;
+        if (TryUpgrade("time", cost, 30))
+        {
+            timeLevel++;
+            timerController.GetComponent<TimerController>().updateTime();
+            coinUpgradeCount.text = TotalCoins.ToString();
+            upgradeMessageText.text = "Upgrade succeeded! Max Time = " + time + "seconds";
+            upgradeMessageText.color = Color.green;
+            levelTime.text = "Max Time =  " + time + " seconds";
+            UpdateUpgradeCosts();
+        }
+        else
+        {
+            upgradeMessageText.text = "Upgrade failed on Time! Not enough coins.";
             upgradeMessageText.color = Color.red;
         }
     }
@@ -442,7 +471,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            upgradeMessageText.text = "Upgrade failed! Not enough coins.";
+            upgradeMessageText.text = "Upgrade failed on Move Speed! Not enough coins.";
             upgradeMessageText.color = Color.red;
         }
     }
@@ -504,7 +533,7 @@ public class PlayerMovement : MonoBehaviour
 
 
 	}
-
+ 
 	public void HideDeathInfoUI()
 	{
 
@@ -516,7 +545,8 @@ public class PlayerMovement : MonoBehaviour
 		deathInfoUI.SetActive(false);
 	}
 
-	public void Freeze()
+
+    public void Freeze()
 	{
 		rb2d.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
 

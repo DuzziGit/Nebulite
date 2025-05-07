@@ -11,7 +11,7 @@ public class UIController : MonoBehaviour
 	public GameObject lossText;
 	public Button continueButtonLose;
 	public Button continueButtonWin;
-
+	public TMP_Text upgradeMessageText; // New UI text element for upgrade messages
 	public GameObject materialBar;
 	public GameObject linearHolder;
 	public GameObject coinText;
@@ -25,6 +25,7 @@ public GameObject upgradeUI;
 	{
 		continueButtonLose.onClick.AddListener(OnClickLose);
 		continueButtonWin.onClick.AddListener(OnClickWin);
+		
 	}
 
 	void OnClickLose()
@@ -135,7 +136,11 @@ timerController.max_time = playerMovement.time;
 		}
 	}
 
-
+	public void UpgradeTimeTextReset()
+	{
+		
+		upgradeMessageText.text = "";
+	}
 
 
 }
