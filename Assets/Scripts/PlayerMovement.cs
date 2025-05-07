@@ -19,6 +19,8 @@ public class PlayerMovement : MonoBehaviour
     const string walkDownRight = "WalkDownRight";
     const string walkDownLeft = "WalkDownLeft";
 
+    private int highScore = 0; 
+
     // UI References
     public GameObject laserStartPoint;
     public GameObject timerController;
@@ -490,7 +492,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (other.CompareTag("Door") && Input.GetKey(KeyCode.E))
         {
-
+            depositText.gameObject.SetActive(false);
 			TotalCoins += coins;
           //  Debug.Log("TotalCoins: " + TotalCoins);
             coins = 0;

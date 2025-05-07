@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1302859029234881098}
   - component: {fileID: 1004634358}
   - component: {fileID: -5104398431797284502}
+  - component: {fileID: -5581065827271590837}
   m_Layer: 7
   m_Name: material 5
   m_TagString: Material
@@ -54,7 +55,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 24a32648c3da6e94da9261ecdce65c2f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -130,3 +131,24 @@ MonoBehaviour:
   materialDropMax: 10
   spreadRadius: 1.5
   materialDropPrefab: {fileID: 1302859029234881101, guid: c648d932707c59947a236ad1cec8db7b, type: 3}
+--- !u!95 &-5581065827271590837
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1302859029234881101}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 27d4b8ddcda4d9c4a92b41e174a3d25b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

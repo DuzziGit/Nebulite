@@ -123,6 +123,7 @@ GameObject:
   - component: {fileID: 1302859029234881098}
   - component: {fileID: 1004634358}
   - component: {fileID: -5104398431797284502}
+  - component: {fileID: 2564296674839460658}
   m_Layer: 7
   m_Name: material 2
   m_TagString: Material
@@ -242,3 +243,24 @@ MonoBehaviour:
   materialDropMax: 10
   spreadRadius: 1.5
   materialDropPrefab: {fileID: 1302859029234881101, guid: ca47a76aaf2161c4d92843994809af67, type: 3}
+--- !u!95 &2564296674839460658
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1302859029234881101}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 27d4b8ddcda4d9c4a92b41e174a3d25b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
