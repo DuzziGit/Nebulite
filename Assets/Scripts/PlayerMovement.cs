@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using LootLocker.Requests;
 public class PlayerMovement : MonoBehaviour
 {
    // Constants
@@ -18,8 +19,8 @@ public class PlayerMovement : MonoBehaviour
     const string walkUpLeft = "WalkUpLeft";
     const string walkDownRight = "WalkDownRight";
     const string walkDownLeft = "WalkDownLeft";
-
-    private int highScore = 0; 
+    string leaderboardKey = "my_leaderboard";
+    private int score = 0; 
 
     // UI References
     public GameObject laserStartPoint;
@@ -43,6 +44,7 @@ public class PlayerMovement : MonoBehaviour
     public TMP_Text levelRange;
     public TMP_Text levelTime;
     public TMP_Text depositText; 
+    public TMP_Text scoreText;
 
     // Upgrade Levels and Max Levels
     private int damageLevel = 1;
@@ -94,6 +96,7 @@ public class PlayerMovement : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            score = 0;
         }
         else if (Instance != this)
         {
@@ -354,6 +357,7 @@ public class PlayerMovement : MonoBehaviour
         // Check if player has enough coins
         if (TotalCoins >= cost)
         {
+            
             // Subtract cost
             TotalCoins -= cost;
 
@@ -495,6 +499,8 @@ public class PlayerMovement : MonoBehaviour
             depositText.gameObject.SetActive(false);
 			TotalCoins += coins;
           //  Debug.Log("TotalCoins: " + TotalCoins);
+          score += coins;
+          scoreText.text = score.ToString();
             coins = 0;
           //  Debug.Log("Temp coins erased: " + coins);
 
@@ -525,10 +531,20 @@ public class PlayerMovement : MonoBehaviour
 
   public void DisplayDeathInfoUI()
     {
+        LootLockerSDKManager.SubmitScore("", score, leaderboardKey, (response) =>
+{
+    if (!response.success)
+    {
+        Debug.Log("Could not submit score!");
+        Debug.Log(response.errorData.ToString());
+        return;
+    }
+    Debug.Log("Successfully submitted score!");
 
-      
-		// Find the DeathInfoUI object
-		GameObject deathInfoUI = transform.Find("DeathInfoUI").gameObject;
+});
+
+        // Find the DeathInfoUI object
+        GameObject deathInfoUI = transform.Find("DeathInfoUI").gameObject;
 
 		// Disable the DeathInfoUI object
 		deathInfoUI.SetActive(true);
