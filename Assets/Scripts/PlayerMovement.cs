@@ -270,6 +270,10 @@ public class PlayerMovement : MonoBehaviour
                     {
                         materialController.TakeDamage(damageAmount);
                     }
+                    EnemyController enemyController = hit.collider.GetComponent<EnemyController>();
+                    if(enemyController != null){
+                        enemyController.TakeDamage(damageAmount);
+                    }
                 }
             }
         }
