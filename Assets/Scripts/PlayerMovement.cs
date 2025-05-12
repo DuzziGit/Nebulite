@@ -47,6 +47,9 @@ public class PlayerMovement : MonoBehaviour
     public TMP_Text scoreText;
 
     // Upgrade Levels and Max Levels
+    public float knockbackForce = 100f; // Adjust the value as needed
+    public float health = 100;
+
     private int damageLevel = 1;
     private int speedLevel = 1;
     private int rangeLevel = 1;
@@ -72,6 +75,8 @@ public class PlayerMovement : MonoBehaviour
     private int direction = 0;
     private bool isAttacking = false;
     private float attackTimer = 0f;
+    private bool canTakeDamage = true;
+    public float damageCooldown = 2f;
 
     // Other
     public Rigidbody2D rb2d;
@@ -192,6 +197,41 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void TakeDamage(float amount, GameObject enemy)
+    {
+        if (!canTakeDamage)
+            return;
+
+        Debug.Log("Taking damage: " + amount);
+        time -= amount;
+
+        StartCoroutine(DamageCooldown());
+    }
+    private IEnumerator DamageCooldown()
+    {
+        canTakeDamage = false;
+        yield return new WaitForSeconds(damageCooldown);
+        canTakeDamage = true;
+    }
+    public void Knockback(Vector3 enemyPosition, float knockbackForce)
+    {
+        Vector2 direction = transform.position - enemyPosition;
+        direction.Normalize();
+        // Try adding the knockback force over a few frames
+        StartCoroutine(ApplyKnockback(direction, knockbackForce));
+        Debug.Log("Player should get knocked back");
+    }
+
+    private IEnumerator ApplyKnockback(Vector2 direction, float force)
+    {
+        float knockbackTime = 0.2f; // The time over which the knockback occurs
+        while (knockbackTime > 0f)
+        {
+            rb2d.AddForce(direction * (force / Time.deltaTime), ForceMode2D.Force); // Apply the force divided over each frame
+            knockbackTime -= Time.deltaTime;
+            yield return null;
+        }
+    }
     void HandlePlayerAction()
     {
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);

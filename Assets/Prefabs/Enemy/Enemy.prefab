@@ -98,12 +98,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2df5ca343dd1684f9e6b6a47d4428f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 1
-  damage: 10
-  moveSpeed: 5
+  health: 0.1
+  damage: 2
+  moveSpeed: 3
   attackRange: 1
   attackCooldown: 2
-  KBForce: 100
+  KBForce: 10
   player: {fileID: 0}
   EnemySpawner: {fileID: 0}
 --- !u!61 &1342743219

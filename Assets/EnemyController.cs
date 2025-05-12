@@ -3,12 +3,12 @@ using System.Collections;
 
 public class EnemyController : MonoBehaviour
 {
-    public float health = 10f;
-    public float damage = 10f;
-    public float moveSpeed = 5f;
+    public float health = 1f;
+    public float damage = 2f;
+    public float moveSpeed = 2f;
     public float attackRange = 1f;
     public float attackCooldown = 2f;
-    public float KBForce =2f;
+    public float KBForce =.2f;
     public GameObject player;
     private bool isShaking = false; // flag to indicate if the material is currently shaking
     private bool canAttack = true; // flag to indicate if the enemy can attack
