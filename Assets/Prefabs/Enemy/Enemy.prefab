@@ -103,7 +103,7 @@ MonoBehaviour:
   moveSpeed: 3
   attackRange: 1
   attackCooldown: 2
-  KBForce: 10
+  KBForce: 3
   player: {fileID: 0}
   EnemySpawner: {fileID: 0}
 --- !u!61 &1342743219

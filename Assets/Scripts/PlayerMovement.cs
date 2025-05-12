@@ -203,7 +203,7 @@ public class PlayerMovement : MonoBehaviour
             return;
 
         Debug.Log("Taking damage: " + amount);
-        time -= amount;
+        timerController.GetComponent<TimerController>().time_remaining -= amount;
 
         StartCoroutine(DamageCooldown());
     }
