@@ -77,7 +77,7 @@ public class PlayerMovement : MonoBehaviour
     private float attackTimer = 0f;
     private bool canTakeDamage = true;
     public float damageCooldown = 2f;
-
+    public EnemySpawner enemySpawner;
     // Other
     public Rigidbody2D rb2d;
     public LayerMask materialLayer;
@@ -540,12 +540,14 @@ public class PlayerMovement : MonoBehaviour
     {
         if (other.CompareTag("Door") && Input.GetKey(KeyCode.E))
         {
+
             depositText.gameObject.SetActive(false);
 			TotalCoins += coins;
           //  Debug.Log("TotalCoins: " + TotalCoins);
           score += coins;
           scoreText.text = score.ToString();
             coins = 0;
+            
           //  Debug.Log("Temp coins erased: " + coins);
 
             coinText.text = TotalCoins.ToString();

@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
+    public int rounds = 0;
     public int maxEnemies = 10;
     public GameObject[] enemyPrefabs;
     public float spawnRate = 1f; // enemies per second
@@ -30,7 +31,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnEnemy()
     {
-        if (enemies.Count >= maxEnemies)
+        if (enemies.Count >= maxEnemies && rounds > 3)
         {
             CancelInvoke(nameof(SpawnEnemy));
             return;
