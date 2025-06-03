@@ -33,11 +33,13 @@ public GameObject upgradeUI;
 		lossText.SetActive(false);
 		continueButtonLose.gameObject.SetActive(false);
 		playerMovement.DisplayDeathInfoUI();
+		Debug.Log("loser");
 	}
 
 	public void OnClickWin()
 	{
-		//continueButtonWin.gameObject.SetActive(false);
+		Debug.Log("win");
+		continueButtonWin.gameObject.SetActive(false);
 		playerMovement.HideDeathInfoUI();
 		upgradeUI.SetActive(true);
 
@@ -62,7 +64,6 @@ timerController.max_time = playerMovement.time;
 		materialBar.SetActive(false);
 		linearHolder.SetActive(false);
 		//coinText.SetActive(false);
-		timerController.
 		StartCoroutine(FadeBlackOutSquare());
 		StartCoroutine(WaitTextLoss());
 		
