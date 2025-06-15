@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
-using LootLocker.Requests;
 public class PlayerMovement : MonoBehaviour
 {
    // Constants
@@ -20,7 +19,7 @@ public class PlayerMovement : MonoBehaviour
     const string walkDownRight = "WalkDownRight";
     const string walkDownLeft = "WalkDownLeft";
     string leaderboardKey = "my_leaderboard";
-    private int score = 0; 
+    public int score = 0; 
 
     // UI References
     public GameObject laserStartPoint;
@@ -93,6 +92,7 @@ public class PlayerMovement : MonoBehaviour
     public static PlayerMovement Instance;
     public TMP_Text upgradeMessageText; // New UI text element for upgrade messages
     Vector2 startPos;
+    public bool gameOver = false;
 
 
    void Awake() 
@@ -219,7 +219,7 @@ public class PlayerMovement : MonoBehaviour
         direction.Normalize();
         // Try adding the knockback force over a few frames
         StartCoroutine(ApplyKnockback(direction, knockbackForce));
-        Debug.Log("Player should get knocked back");
+//        Debug.Log("Player should get knocked back");
     }
 
     private IEnumerator ApplyKnockback(Vector2 direction, float force)
@@ -529,7 +529,7 @@ public class PlayerMovement : MonoBehaviour
 	public void TimeHasRunOut()
 	{
 		Freeze();
-
+        gameOver = true;
 		uiController.PlayerLoss();
 		
 	}
@@ -561,7 +561,7 @@ public class PlayerMovement : MonoBehaviour
     }
  void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Door"))
+        if (other.CompareTag("Door") && gameOver == false)
         {
             depositText.gameObject.SetActive(true);
         }
@@ -575,19 +575,18 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-  public void DisplayDeathInfoUI()
+    public void DisplayDeathInfoUI()
     {
-        LootLockerSDKManager.SubmitScore("", score, leaderboardKey, (response) =>
-{
-    if (!response.success)
-    {
-        Debug.Log("Could not submit score!");
-        Debug.Log(response.errorData.ToString());
-        return;
-    }
-    Debug.Log("Successfully submitted score!");
-
-});
+        //         LootLockerSDKManager.SubmitScore("", score, leaderboardKey, (response) =>
+        // {
+        //     if (!response.success)
+        //     {
+        //         Debug.Log("Could not submit score!");
+        //         Debug.Log(response.errorData.ToString());
+        //         return;
+        //     }
+        //     Debug.Log("Successfully submitted score!");
+  //  });
 
         // Find the DeathInfoUI object
         GameObject deathInfoUI = transform.Find("DeathInfoUI").gameObject;

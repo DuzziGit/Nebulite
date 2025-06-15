@@ -1,22 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using LootLocker.Requests;
+//using LootLocker.Requests;
 
 public class GameManager : MonoBehaviour
 {
     void Start()
     {
-        LootLockerSDKManager.StartGuestSession((response) =>
-        {
-            if (!response.success)
-            {
-                Debug.Log("error starting LootLocker session");
+        // LootLockerSDKManager.StartGuestSession((response) =>
+        // {
+        //     if (!response.success)
+        //     {
+        //         Debug.Log("error starting LootLocker session");
 
-                return;
-            }
+        //         return;
+        //     }
 
-            Debug.Log("successfully started LootLocker session");
-        });
+        //     Debug.Log("successfully started LootLocker session");
+        // });
     }
 }

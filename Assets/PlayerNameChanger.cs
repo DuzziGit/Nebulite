@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
-using LootLocker.Requests;
 using TMPro;
 
 public class PlayerNameChanger : MonoBehaviour
@@ -11,16 +9,10 @@ public class PlayerNameChanger : MonoBehaviour
     {
         string newName = playerNameInput.text;
 
-        LootLockerSDKManager.SetPlayerName(newName, (response) =>
-        {
-            if (response.success)
-            {
-                Debug.Log("Player name successfully set to: " + newName);
-            }
-            else
-            {
-                Debug.LogError("Failed to set player name: " + response.errorData.message);
-            }
-        });
+        // Save it to PlayerPrefs
+        PlayerPrefs.SetString("PlayerUsername", newName);
+        PlayerPrefs.Save();
+
+        Debug.Log("Username set to: " + newName);
     }
 }

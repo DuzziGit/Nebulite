@@ -32,11 +32,13 @@ public class EnemyController : MonoBehaviour
     private bool isMoving = true; // flag to indicate if the enemy is moving
     public EnemySpawner EnemySpawner;
     private Vector3 originalPosition;
+    public PlayerMovement playerMovement;
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player"); // Assumes the player object has a "Player" tag
         originalPosition = transform.position;
-        animator = GetComponent<Animator>(); 
+        playerMovement = player.GetComponent<PlayerMovement>(); // Get the PlayerMovement script
+        animator = GetComponent<Animator>();
 
     }
 
@@ -151,8 +153,10 @@ public class EnemyController : MonoBehaviour
         if (health <= 0)
         {
             Debug.Log("Enemy destroyed");
+
             EnemySpawner.RemoveEnemy(this.gameObject);
             Destroy(this.gameObject);
+
         }
         else if (!isShaking)
         {
