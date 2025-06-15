@@ -135,7 +135,21 @@ namespace Dan.Main
             request.Dispose();
         }
 
+        // internal void SendPlainPostRequest(string url, List<IMultipartFormSection> form, Action<bool> callback = null, Action<string> errorCallback = null)Add commentMore actions
+        // {
+        //     var request = UnityWebRequest.Post(url, form);
+        //     StartCoroutine(HandleRequest(request, callback, errorCallback));
+        // }
 
+        internal void SendPlainPostRequest(string url, string jsonData, Action<bool> callback = null, Action<string> errorCallback = null)
+        {
+            var request = new UnityWebRequest(url, "POST");
+            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+            StartCoroutine(HandleRequest(request, callback, errorCallback));
+        }
         private static void HandleError(UnityWebRequest request)
         {
             var message = Enum.GetName(typeof(StatusCode), (StatusCode)request.responseCode);
