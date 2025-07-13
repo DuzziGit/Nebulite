@@ -37,10 +37,7 @@ public class UIController : MonoBehaviour
 
 	public void UploadEntry()
 	{
-		string url = Dan.ConstantVariables.GetServerURL(Dan.Enums.Routes.Upload);
-		Debug.Log("Uploading score to: " + url);
-		Debug.Log("Username: " + currentUserName + ", Score: " + playerMovement.score);
-
+		
 		// Instantiate LeaderboardReference
 		LeaderboardReference leaderboard = new LeaderboardReference("geggsend_go");
 
